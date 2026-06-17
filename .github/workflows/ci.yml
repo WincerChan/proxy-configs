@@ -20,6 +20,9 @@ on:
       - "tests/**"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build release configs
@@ -54,3 +57,23 @@ jobs:
             dist/clash/clash-naixi-stable.yaml
             dist/quanx/quantumultx-naixi-stable.conf
           if-no-files-found: error
+
+      - name: Prepare dist branch files
+        if: github.event_name != 'pull_request'
+        run: |
+          rm -rf /tmp/proxy-configs-dist
+          mkdir -p /tmp/proxy-configs-dist
+          cp dist/clash/clash-naixi-stable.yaml /tmp/proxy-configs-dist/
+          cp dist/quanx/quantumultx-naixi-stable.conf /tmp/proxy-configs-dist/
+
+      - name: Publish dist branch
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan dist-publish
+          git rm -rf .
+          cp /tmp/proxy-configs-dist/* .
+          git add clash-naixi-stable.yaml quantumultx-naixi-stable.conf
+          git commit -m "chore: publish built proxy configs"
+          git push --force origin dist-publish:dist
