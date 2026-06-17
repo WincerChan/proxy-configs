@@ -1,0 +1,699 @@
+# FlClash / Mihomo - Naixi final config with emoji policy groups
+# Fill proxy-providers.Naixi.url with your Naixi Clash/Mihomo subscription URL.
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+proxy-providers:
+  Naixi:
+    type: http
+    url: '' # todo
+    interval: 86400
+    path: ./providers/naixi.yaml
+    override:
+      udp: true
+proxy-groups:
+- name: 🚀 代理
+  type: select
+  proxies:
+  - 🧭 节点选择
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🇭🇰 香港自动
+  - 🇹🇼 台湾自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🇰🇷 韩国自动
+  - 🇬🇧 英国自动
+  - 🇪🇺 欧洲自动
+  - 🇨🇦 加拿大自动
+  - 🇦🇺 澳洲自动
+  - DIRECT
+- name: 🧭 节点选择
+  type: select
+  use:
+  - Naixi
+  filter: (?i).*
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+- name: 📊 流量看板
+  type: select
+  use:
+  - Naixi
+  filter: (?i)(剩余|流量|套餐|官网|到期|expire|traffic|reset|days left|expire date|^[0-9.]+[
+    ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+- name: ♻️ 自动低延迟
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US|korea|韩国|首尔|seoul|KR|united[
+    ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 80
+  timeout: 5000
+  lazy: false
+- name: 🛟 故障切换
+  type: fallback
+  use:
+  - Naixi
+  filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US|korea|韩国|首尔|seoul|KR|united[
+    ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  timeout: 5000
+  lazy: false
+- name: 🤖 AI
+  type: select
+  proxies:
+  - 🇺🇸 美国自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🚀 代理
+- name: ✈️ Telegram
+  type: select
+  proxies:
+  - 🇸🇬 新加坡自动
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🚀 代理
+- name: 💰 Crypto
+  type: select
+  proxies:
+  - 🧭 节点选择
+  - 🇭🇰 香港自动
+  - 🇸🇬 新加坡自动
+  - 🇹🇼 台湾自动
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+  - 🚀 代理
+  - DIRECT
+- name: 🎬 Netflix
+  type: select
+  proxies:
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇭🇰 香港自动
+  - 🇺🇸 美国自动
+  - ♻️ 自动低延迟
+  - 🚀 代理
+- name: 📺 DisneyPlus
+  type: select
+  proxies:
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇭🇰 香港自动
+  - 🇺🇸 美国自动
+  - ♻️ 自动低延迟
+  - 🚀 代理
+- name: 📺 YouTube
+  type: select
+  proxies:
+  - ♻️ 自动低延迟
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🚀 代理
+- name: 📺 Bilibili
+  type: select
+  proxies:
+  - DIRECT
+  - 🇭🇰 香港自动
+  - 🇹🇼 台湾自动
+  - 🇸🇬 新加坡自动
+  - 🚀 代理
+- name: 🎮 Steam
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+- name: 🎮 Games
+  type: select
+  proxies:
+  - 🚀 代理
+  - DIRECT
+  - 🇯🇵 日本自动
+  - 🇭🇰 香港自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+- name: Ⓜ️ Microsoft
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+- name: 🍎 Apple
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+- name: 🔍 Google
+  type: select
+  proxies:
+  - ♻️ 自动低延迟
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🚀 代理
+- name: 💻 GitHub
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+  - DIRECT
+- name: 🐦 Twitter
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+  - 🇸🇬 新加坡自动
+- name: 📱 TikTok
+  type: select
+  proxies:
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇹🇼 台湾自动
+  - 🇺🇸 美国自动
+  - 🚀 代理
+- name: 🎵 Spotify
+  type: select
+  proxies:
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - DIRECT
+- name: ☁️ OneDrive
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇺🇸 美国自动
+- name: 📘 Social
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+- name: 🌍 Global
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+- name: 🇨🇳 直连
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+- name: 🐟 Final
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - DIRECT
+- name: 🇭🇰 香港自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(hong[ ]*kong|香港|港|HK)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 50
+  timeout: 5000
+  lazy: false
+- name: 🇹🇼 台湾自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(taiwan|台湾|台北|taipei|TW)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 50
+  timeout: 5000
+  lazy: false
+- name: 🇯🇵 日本自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(japan|日本|东京|大阪|tokyo|osaka|JP)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 50
+  timeout: 5000
+  lazy: false
+- name: 🇸🇬 新加坡自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(singapore|新加坡|狮城|SG)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 50
+  timeout: 5000
+  lazy: false
+- name: 🇺🇸 美国自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(usa|united[ ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 80
+  timeout: 5000
+  lazy: false
+- name: 🇰🇷 韩国自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(korea|韩国|首尔|seoul|KR)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 60
+  timeout: 5000
+  lazy: false
+- name: 🇬🇧 英国自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(united[ ]*kingdom|britain|london|英国|伦敦|UK)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 80
+  timeout: 5000
+  lazy: false
+- name: 🇪🇺 欧洲自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(netherlands|germany|switzerland|france|united[ ]*kingdom|sweden|bulgaria|austria|ireland|turkey|hungary|russia|moscow|petersburg|荷兰|德国|瑞士|法国|英国|瑞典|保加利亚|奥地利|爱尔兰|土耳其|匈牙利|俄罗斯)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 100
+  timeout: 5000
+  lazy: false
+- name: 🇨🇦 加拿大自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(canada|加拿大|toronto|vancouver|CA)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 100
+  timeout: 5000
+  lazy: false
+- name: 🇦🇺 澳洲自动
+  type: url-test
+  use:
+  - Naixi
+  filter: (?i)(australia|sydney|澳大利亚|澳洲|悉尼|AU)
+  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
+  url: http://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 100
+  timeout: 5000
+  lazy: false
+rule-providers:
+  reject_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/reject_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs
+    proxy: 🚀 代理
+  private_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/private_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs
+    proxy: 🚀 代理
+  private_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/private_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
+    proxy: 🚀 代理
+  cn_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/cn_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs
+    proxy: 🚀 代理
+  cn_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/cn_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
+    proxy: 🚀 代理
+  geolocation_not_cn:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/geolocation_not_cn.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
+    proxy: 🚀 代理
+  openai_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/openai_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs
+    proxy: 🚀 代理
+  telegram_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/telegram_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs
+    proxy: 🚀 代理
+  telegram_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/telegram_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs
+    proxy: 🚀 代理
+  netflix_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/netflix_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs
+    proxy: 🚀 代理
+  netflix_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/netflix_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs
+    proxy: 🚀 代理
+  youtube_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/youtube_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs
+    proxy: 🚀 代理
+  bilibili_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/bilibili_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs
+    proxy: 🚀 代理
+  biliintl_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/biliintl_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.mrs
+    proxy: 🚀 代理
+  google_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/google_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs
+    proxy: 🚀 代理
+  google_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/google_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs
+    proxy: 🚀 代理
+  github_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/github_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs
+    proxy: 🚀 代理
+  microsoft_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/microsoft_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs
+    proxy: 🚀 代理
+  onedrive_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/onedrive_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs
+    proxy: 🚀 代理
+  apple_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/apple_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    proxy: 🚀 代理
+  steam_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/steam_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs
+    proxy: 🚀 代理
+  games_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/games_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.mrs
+    proxy: 🚀 代理
+  twitter_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/twitter_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs
+    proxy: 🚀 代理
+  twitter_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./rules/twitter_ip.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs
+    proxy: 🚀 代理
+  tiktok_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/tiktok_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs
+    proxy: 🚀 代理
+  disney_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/disney_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs
+    proxy: 🚀 代理
+  spotify_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/spotify_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs
+    proxy: 🚀 代理
+  facebook_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./rules/facebook_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.mrs
+    proxy: 🚀 代理
+rules:
+- RULE-SET,reject_domain,REJECT
+- RULE-SET,private_domain,DIRECT
+- RULE-SET,private_ip,DIRECT,no-resolve
+- RULE-SET,openai_domain,🤖 AI
+- DOMAIN-SUFFIX,chatgpt.com,🤖 AI
+- DOMAIN-SUFFIX,openai.com,🤖 AI
+- DOMAIN-SUFFIX,oaistatic.com,🤖 AI
+- DOMAIN-SUFFIX,oaiusercontent.com,🤖 AI
+- DOMAIN-SUFFIX,anthropic.com,🤖 AI
+- DOMAIN-SUFFIX,claude.ai,🤖 AI
+- DOMAIN-SUFFIX,perplexity.ai,🤖 AI
+- DOMAIN-SUFFIX,poe.com,🤖 AI
+- DOMAIN-SUFFIX,gemini.google.com,🤖 AI
+- DOMAIN-SUFFIX,ai.google.dev,🤖 AI
+- DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI
+- DOMAIN-KEYWORD,openai,🤖 AI
+- DOMAIN-KEYWORD,chatgpt,🤖 AI
+- DOMAIN-KEYWORD,anthropic,🤖 AI
+- DOMAIN-KEYWORD,claude,🤖 AI
+- DOMAIN-SUFFIX,binance.com,💰 Crypto
+- DOMAIN-SUFFIX,binance.us,💰 Crypto
+- DOMAIN-SUFFIX,bnbstatic.com,💰 Crypto
+- DOMAIN-SUFFIX,okx.com,💰 Crypto
+- DOMAIN-SUFFIX,bybit.com,💰 Crypto
+- DOMAIN-SUFFIX,bitget.com,💰 Crypto
+- DOMAIN-SUFFIX,gate.io,💰 Crypto
+- DOMAIN-SUFFIX,kucoin.com,💰 Crypto
+- DOMAIN-SUFFIX,coinbase.com,💰 Crypto
+- DOMAIN-SUFFIX,kraken.com,💰 Crypto
+- DOMAIN-SUFFIX,bitfinex.com,💰 Crypto
+- DOMAIN-SUFFIX,mexc.com,💰 Crypto
+- DOMAIN-SUFFIX,bithumb.com,💰 Crypto
+- DOMAIN-SUFFIX,upbit.com,💰 Crypto
+- DOMAIN-SUFFIX,coingecko.com,💰 Crypto
+- DOMAIN-SUFFIX,coinmarketcap.com,💰 Crypto
+- DOMAIN-SUFFIX,tradingview.com,💰 Crypto
+- DOMAIN-KEYWORD,binance,💰 Crypto
+- DOMAIN-KEYWORD,bybit,💰 Crypto
+- DOMAIN-KEYWORD,okx,💰 Crypto
+- RULE-SET,telegram_domain,✈️ Telegram
+- RULE-SET,telegram_ip,✈️ Telegram,no-resolve
+- RULE-SET,netflix_domain,🎬 Netflix
+- RULE-SET,netflix_ip,🎬 Netflix,no-resolve
+- RULE-SET,disney_domain,📺 DisneyPlus
+- DOMAIN-SUFFIX,disneyplus.com,📺 DisneyPlus
+- DOMAIN-SUFFIX,disney-plus.net,📺 DisneyPlus
+- DOMAIN-SUFFIX,dssott.com,📺 DisneyPlus
+- DOMAIN-SUFFIX,bamgrid.com,📺 DisneyPlus
+- RULE-SET,youtube_domain,📺 YouTube
+- RULE-SET,bilibili_domain,📺 Bilibili
+- RULE-SET,biliintl_domain,📺 Bilibili
+- RULE-SET,spotify_domain,🎵 Spotify
+- RULE-SET,google_domain,🔍 Google
+- RULE-SET,google_ip,🔍 Google,no-resolve
+- RULE-SET,github_domain,💻 GitHub
+- RULE-SET,microsoft_domain,Ⓜ️ Microsoft
+- RULE-SET,onedrive_domain,☁️ OneDrive
+- RULE-SET,apple_domain,🍎 Apple
+- RULE-SET,twitter_domain,🐦 Twitter
+- RULE-SET,twitter_ip,🐦 Twitter,no-resolve
+- RULE-SET,tiktok_domain,📱 TikTok
+- RULE-SET,facebook_domain,📘 Social
+- DOMAIN-SUFFIX,facebook.com,📘 Social
+- DOMAIN-SUFFIX,fbcdn.net,📘 Social
+- DOMAIN-SUFFIX,instagram.com,📘 Social
+- DOMAIN-SUFFIX,cdninstagram.com,📘 Social
+- DOMAIN-SUFFIX,whatsapp.com,📘 Social
+- DOMAIN-SUFFIX,discord.com,📘 Social
+- DOMAIN-SUFFIX,discordapp.com,📘 Social
+- DOMAIN-SUFFIX,reddit.com,📘 Social
+- DOMAIN-SUFFIX,redd.it,📘 Social
+- RULE-SET,steam_domain,🎮 Steam
+- RULE-SET,games_domain,🎮 Games
+- DOMAIN-SUFFIX,steamcommunity.com,🎮 Steam
+- DOMAIN-SUFFIX,steampowered.com,🎮 Steam
+- DOMAIN-SUFFIX,steamstatic.com,🎮 Steam
+- DOMAIN-SUFFIX,epicgames.com,🎮 Games
+- DOMAIN-SUFFIX,unrealengine.com,🎮 Games
+- DOMAIN-SUFFIX,battle.net,🎮 Games
+- DOMAIN-SUFFIX,blizzard.com,🎮 Games
+- DOMAIN-SUFFIX,ea.com,🎮 Games
+- DOMAIN-SUFFIX,ubisoft.com,🎮 Games
+- RULE-SET,cn_domain,🇨🇳 直连
+- RULE-SET,cn_ip,🇨🇳 直连,no-resolve
+- RULE-SET,geolocation_not_cn,🌍 Global
+- MATCH,🐟 Final
