@@ -1,0 +1,56 @@
+name: proxy-configs ci
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - ".github/workflows/ci.yml"
+      - "dist/**"
+      - "scripts/**"
+      - "src/**"
+      - "tests/**"
+  pull_request:
+    paths:
+      - ".github/workflows/ci.yml"
+      - "dist/**"
+      - "scripts/**"
+      - "src/**"
+      - "tests/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build release configs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out WincerChan/proxy-configs
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build dist configs
+        run: python3 scripts/build-release.py
+
+      - name: Validate Clash config
+        run: python3 scripts/validate-clash.py
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Check generated dist files
+        run: git diff --exit-code -- dist/clash/clash-naixi-stable.yaml dist/quanx/quantumultx-naixi-stable.conf
+
+      - name: Upload dist configs
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxy-configs-dist
+          path: |
+            dist/clash/clash-naixi-stable.yaml
+            dist/quanx/quantumultx-naixi-stable.conf
+          if-no-files-found: error
