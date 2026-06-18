@@ -26,6 +26,20 @@ class ValidateClashTests(unittest.TestCase):
 
         self.assertGreater(group_count, 0)
 
+    def test_business_groups_include_required_proxy_choices(self):
+        validate_clash = load_validate_clash()
+        path = ROOT / "dist" / "clash" / "clash-naixi-stable.yaml"
+        _, groups = validate_clash.load_structure(path)
+
+        business_groups = validate_clash.business_groups(groups)
+        self.assertIn("🤖 AI", business_groups)
+        self.assertIn("🌍 Global", business_groups)
+
+        for name, proxies in business_groups.items():
+            with self.subTest(group=name):
+                for required_proxy in validate_clash.REQUIRED_BUSINESS_PROXIES:
+                    self.assertIn(required_proxy, proxies)
+
 
 if __name__ == "__main__":
     unittest.main()

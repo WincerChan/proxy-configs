@@ -63,6 +63,7 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇹🇼 台湾自动
+  - 🇭🇰 香港自动
   - ♻️ 自动低延迟
   - 🛟 故障切换
   - 🚀 代理
@@ -72,6 +73,8 @@ proxy-groups:
   - 🇸🇬 新加坡自动
   - 🇭🇰 香港自动
   - 🇯🇵 日本自动
+  - 🇹🇼 台湾自动
+  - 🇺🇸 美国自动
   - ♻️ 自动低延迟
   - 🛟 故障切换
   - 🚀 代理
@@ -85,6 +88,8 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
   - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
   - DIRECT
 - name: 🎬 Netflix
   type: select
@@ -93,7 +98,9 @@ proxy-groups:
   - 🇸🇬 新加坡自动
   - 🇭🇰 香港自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
   - ♻️ 自动低延迟
+  - 🛟 故障切换
   - 🚀 代理
 - name: 📺 DisneyPlus
   type: select
@@ -102,7 +109,9 @@ proxy-groups:
   - 🇸🇬 新加坡自动
   - 🇭🇰 香港自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
   - ♻️ 自动低延迟
+  - 🛟 故障切换
   - 🚀 代理
 - name: 📺 YouTube
   type: select
@@ -112,6 +121,8 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🛟 故障切换
   - 🚀 代理
 - name: 📺 Bilibili
   type: select
@@ -120,6 +131,10 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇹🇼 台湾自动
   - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🇯🇵 日本自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
   - 🚀 代理
 - name: 🎮 Steam
   type: select
@@ -130,6 +145,9 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: 🎮 Games
   type: select
   proxies:
@@ -139,6 +157,9 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: Ⓜ️ Microsoft
   type: select
   proxies:
@@ -147,6 +168,10 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🇸🇬 新加坡自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: 🍎 Apple
   type: select
   proxies:
@@ -155,6 +180,10 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🇸🇬 新加坡自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: 🔍 Google
   type: select
   proxies:
@@ -163,6 +192,8 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🛟 故障切换
   - 🚀 代理
 - name: 💻 GitHub
   type: select
@@ -172,6 +203,9 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🇸🇬 新加坡自动
+  - 🛟 故障切换
   - DIRECT
 - name: 🐦 Twitter
   type: select
@@ -181,6 +215,9 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
   - 🇸🇬 新加坡自动
+  - 🇭🇰 香港自动
+  - 🇹🇼 台湾自动
+  - 🛟 故障切换
 - name: 📱 TikTok
   type: select
   proxies:
@@ -189,6 +226,9 @@ proxy-groups:
   - 🇹🇼 台湾自动
   - 🇺🇸 美国自动
   - 🚀 代理
+  - 🇭🇰 香港自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: 🎵 Spotify
   type: select
   proxies:
@@ -197,6 +237,9 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
   - DIRECT
 - name: ☁️ OneDrive
   type: select
@@ -206,6 +249,10 @@ proxy-groups:
   - 🇭🇰 香港自动
   - 🇯🇵 日本自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🇸🇬 新加坡自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
 - name: 📘 Social
   type: select
   proxies:
@@ -215,6 +262,8 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - 🛟 故障切换
 - name: 🌍 Global
   type: select
   proxies:
@@ -225,6 +274,7 @@ proxy-groups:
   - 🇯🇵 日本自动
   - 🇸🇬 新加坡自动
   - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
 - name: 🇨🇳 直连
   type: select
   proxies:
