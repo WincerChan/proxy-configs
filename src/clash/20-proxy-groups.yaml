@@ -136,7 +136,31 @@ proxy-groups:
   - ♻️ 自动低延迟
   - 🛟 故障切换
   - 🚀 代理
-- name: 🎮 Steam
+- name: 🎮 Steam 登录社区
+  type: select
+  proxies:
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - DIRECT
+- name: 🛒 Steam 商店支付
+  type: select
+  proxies:
+  - DIRECT
+  - 🚀 代理
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+- name: 📦 Steam 下载CDN
   type: select
   proxies:
   - DIRECT

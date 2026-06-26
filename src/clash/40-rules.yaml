@@ -70,11 +70,66 @@ rules:
 - DOMAIN-SUFFIX,discordapp.com,📘 Social
 - DOMAIN-SUFFIX,reddit.com,📘 Social
 - DOMAIN-SUFFIX,redd.it,📘 Social
-- RULE-SET,steam_domain,🎮 Steam
+- DOMAIN,edge.steam-dns.top.comcast.net,📦 Steam 下载CDN
+- DOMAIN,alibaba.cdn.steampipe.steamcontent.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steamcontent.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steamserver.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steamcdn-a.akamaihd.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steampipe.akamaized.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steampipe-kr.akamaized.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steampipe-partner.akamaized.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.apac.qtlglb.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.eca.qtlglb.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.naeu.qtlglb.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.ru.qtlglb.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.cdn.on.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.cdn.webra.ru,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.cdn.orcon.net.nz,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,cdn-ali.content.steamchina.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,cdn-qc.content.steamchina.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,cdn-ws.content.steamchina.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,dl.steam.clngaa.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,dl.steam.ksyna.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,st.dl.bscstorage.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,st.dl.eccdnx.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,st.dl.pinyuncloud.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,client-update.queniuqe.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steamcontent.tnkjmec.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steampowered.com.8686c.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,steamstatic.com.8686c.com,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net,📦 Steam 下载CDN
+- DOMAIN-SUFFIX,store.steampowered.com,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,checkout.steampowered.com,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,help.steampowered.com,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,steamstore-a.akamaihd.net,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,steamstatic.com,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,steampowered.com,🛒 Steam 商店支付
+- DOMAIN-SUFFIX,steamcommunity.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steam-chat.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steam-api.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamusercontent.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamvideo-a.akamaihd.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steambroadcast.akamaized.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steammobile.akamaized.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steam.tv,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,s.team,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamconnecttest.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,valve.net,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,valvesoftware.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamgames.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamdeck.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,steamchina.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,wmsjsteam.com,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,csgo.com.cn,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,csgo.wmsj.cn,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,dota2.com.cn,🎮 Steam 登录社区
+- DOMAIN-SUFFIX,dota2.wmsj.cn,🎮 Steam 登录社区
 - RULE-SET,games_domain,🎮 Games
-- DOMAIN-SUFFIX,steamcommunity.com,🎮 Steam
-- DOMAIN-SUFFIX,steampowered.com,🎮 Steam
-- DOMAIN-SUFFIX,steamstatic.com,🎮 Steam
 - DOMAIN-SUFFIX,epicgames.com,🎮 Games
 - DOMAIN-SUFFIX,unrealengine.com,🎮 Games
 - DOMAIN-SUFFIX,battle.net,🎮 Games

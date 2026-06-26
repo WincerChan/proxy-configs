@@ -159,14 +159,6 @@ rule-providers:
     path: ./rules/apple_domain.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
     proxy: 🚀 代理
-  steam_domain:
-    type: http
-    behavior: domain
-    format: mrs
-    interval: 86400
-    path: ./rules/steam_domain.mrs
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs
-    proxy: 🚀 代理
   games_domain:
     type: http
     behavior: domain
