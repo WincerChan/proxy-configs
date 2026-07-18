@@ -19,7 +19,6 @@ QUANX_PARTS = [
     "20-policy.conf",
     "30-server-remote.conf",
     "40-server-local.conf",
-    "45-filter-apple-push.conf",
     "50-filter-remote.conf",
     "60-rewrite-remote.conf",
     "70-filter-local.conf",
@@ -64,6 +63,12 @@ def build_quanx(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
     output = read_parts(src_dir, QUANX_PARTS, "\n\n")
     out_path = out_dir / f"quantumultx-naixi-{version}.conf"
     out_path.write_text(output, encoding="utf-8")
+
+    push_src = root / "rules" / "apple-push.list"
+    if push_src.exists():
+        (out_dir / "apple-push.list").write_text(
+            push_src.read_text(encoding="utf-8"), encoding="utf-8"
+        )
 
     return out_path
 

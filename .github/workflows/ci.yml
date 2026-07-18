@@ -56,6 +56,8 @@ jobs:
           path: |
             dist/clash/clash-naixi-stable.yaml
             dist/quanx/quantumultx-naixi-stable.conf
+            dist/quanx/apple-push.list
+            rules/apple-push.list
           if-no-files-found: error
 
       - name: Prepare dist branch files
@@ -65,6 +67,7 @@ jobs:
           mkdir -p /tmp/proxy-configs-dist
           cp dist/clash/clash-naixi-stable.yaml /tmp/proxy-configs-dist/
           cp dist/quanx/quantumultx-naixi-stable.conf /tmp/proxy-configs-dist/
+          cp rules/apple-push.list /tmp/proxy-configs-dist/
 
       - name: Publish dist branch
         if: github.event_name != 'pull_request'
@@ -74,6 +77,6 @@ jobs:
           git checkout --orphan dist-publish
           git rm -rf .
           cp /tmp/proxy-configs-dist/* .
-          git add clash-naixi-stable.yaml quantumultx-naixi-stable.conf
+          git add clash-naixi-stable.yaml quantumultx-naixi-stable.conf apple-push.list
           git commit -m "chore: publish built proxy configs"
           git push --force origin dist-publish:dist
