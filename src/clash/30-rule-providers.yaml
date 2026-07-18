@@ -151,13 +151,13 @@ rule-providers:
     path: ./rules/onedrive_domain.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs
     proxy: 🚀 代理
-  apple_domain:
+  apple:
     type: http
-    behavior: domain
-    format: mrs
+    behavior: classical
+    format: yaml
     interval: 86400
-    path: ./rules/apple_domain.mrs
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    path: ./rules/apple.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple_All.yaml
     proxy: 🚀 代理
   games_domain:
     type: http

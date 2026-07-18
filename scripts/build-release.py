@@ -19,6 +19,7 @@ QUANX_PARTS = [
     "20-policy.conf",
     "30-server-remote.conf",
     "40-server-local.conf",
+    "45-filter-apple-push.conf",
     "50-filter-remote.conf",
     "60-rewrite-remote.conf",
     "70-filter-local.conf",

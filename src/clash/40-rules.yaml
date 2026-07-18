@@ -56,7 +56,15 @@ rules:
 - RULE-SET,github_domain,💻 GitHub
 - RULE-SET,microsoft_domain,Ⓜ️ Microsoft
 - RULE-SET,onedrive_domain,☁️ OneDrive
-- RULE-SET,apple_domain,🍎 Apple
+# APNs only -> 🍎 Apple推送 (proxy). Other Apple traffic stays on 🍎 Apple (direct).
+- DOMAIN-SUFFIX,push.apple.com,🍎 Apple推送
+- DOMAIN-SUFFIX,push-apple.com.akadns.net,🍎 Apple推送
+- DOMAIN-KEYWORD,push.apple,🍎 Apple推送
+- DOMAIN,courier.push.apple.com,🍎 Apple推送
+- DOMAIN,api.push.apple.com,🍎 Apple推送
+- DOMAIN,api2.push.apple.com,🍎 Apple推送
+- DOMAIN,api3.push.apple.com,🍎 Apple推送
+- RULE-SET,apple,🍎 Apple,no-resolve
 - RULE-SET,twitter_domain,🐦 Twitter
 - RULE-SET,twitter_ip,🐦 Twitter,no-resolve
 - RULE-SET,tiktok_domain,📱 TikTok

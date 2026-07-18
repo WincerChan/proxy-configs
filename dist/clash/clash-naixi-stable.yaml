@@ -224,6 +224,18 @@ proxy-groups:
   - 🇸🇬 新加坡自动
   - ♻️ 自动低延迟
   - 🛟 故障切换
+- name: 🍎 Apple推送
+  type: select
+  proxies:
+  - 🚀 代理
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🇭🇰 香港自动
+  - 🇯🇵 日本自动
+  - 🇸🇬 新加坡自动
+  - 🇺🇸 美国自动
+  - 🇹🇼 台湾自动
+  - DIRECT
 - name: 🍎 Apple
   type: select
   proxies:
@@ -612,13 +624,13 @@ rule-providers:
     path: ./rules/onedrive_domain.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs
     proxy: 🚀 代理
-  apple_domain:
+  apple:
     type: http
-    behavior: domain
-    format: mrs
+    behavior: classical
+    format: yaml
     interval: 86400
-    path: ./rules/apple_domain.mrs
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs
+    path: ./rules/apple.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple_All.yaml
     proxy: 🚀 代理
   games_domain:
     type: http
@@ -734,7 +746,15 @@ rules:
 - RULE-SET,github_domain,💻 GitHub
 - RULE-SET,microsoft_domain,Ⓜ️ Microsoft
 - RULE-SET,onedrive_domain,☁️ OneDrive
-- RULE-SET,apple_domain,🍎 Apple
+# APNs only -> 🍎 Apple推送 (proxy). Other Apple traffic stays on 🍎 Apple (direct).
+- DOMAIN-SUFFIX,push.apple.com,🍎 Apple推送
+- DOMAIN-SUFFIX,push-apple.com.akadns.net,🍎 Apple推送
+- DOMAIN-KEYWORD,push.apple,🍎 Apple推送
+- DOMAIN,courier.push.apple.com,🍎 Apple推送
+- DOMAIN,api.push.apple.com,🍎 Apple推送
+- DOMAIN,api2.push.apple.com,🍎 Apple推送
+- DOMAIN,api3.push.apple.com,🍎 Apple推送
+- RULE-SET,apple,🍎 Apple,no-resolve
 - RULE-SET,twitter_domain,🐦 Twitter
 - RULE-SET,twitter_ip,🐦 Twitter,no-resolve
 - RULE-SET,tiktok_domain,📱 TikTok
