@@ -34,7 +34,7 @@ proxy-groups:
   use:
   - Naixi
   filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
-    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US|korea|韩国|首尔|seoul|KR|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
     ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
   exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
@@ -48,7 +48,7 @@ proxy-groups:
   use:
   - Naixi
   filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
-    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US|korea|韩国|首尔|seoul|KR|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
     ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
   exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
@@ -64,6 +64,12 @@ proxy-groups:
   - 🇸🇬 新加坡自动
   - 🇹🇼 台湾自动
   - 🇭🇰 香港自动
+  - 🇰🇷 韩国自动
+  - 🇬🇧 英国自动
+  - 🇪🇺 欧洲自动
+  - 🇨🇦 加拿大自动
+  - 🇦🇺 澳洲自动
+  - 🧭 节点选择
   - ♻️ 自动低延迟
   - 🛟 故障切换
   - 🚀 代理
@@ -375,7 +381,7 @@ proxy-groups:
   type: url-test
   use:
   - Naixi
-  filter: (?i)(usa|united[ ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|US)
+  filter: (?i)(usa|united[ ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z]))
   exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
@@ -435,7 +441,7 @@ proxy-groups:
   type: url-test
   use:
   - Naixi
-  filter: (?i)(australia|sydney|澳大利亚|澳洲|悉尼|AU)
+  filter: (?i)(australia|sydney|澳大利亚|澳洲|悉尼|(?:^|[^A-Za-z])AU(?:$|[^A-Za-z]))
   exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
