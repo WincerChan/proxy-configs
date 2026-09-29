@@ -73,6 +73,24 @@ proxy-groups:
   - ♻️ 自动低延迟
   - 🛟 故障切换
   - 🚀 代理
+- name: 🐕 Hound
+  type: select
+  proxies:
+  - 🇯🇵 日本自动
+  - 🧭 节点选择
+  - 🇺🇸 美国自动
+  - 🇸🇬 新加坡自动
+  - 🇹🇼 台湾自动
+  - 🇭🇰 香港自动
+  - 🇰🇷 韩国自动
+  - 🇬🇧 英国自动
+  - 🇪🇺 欧洲自动
+  - 🇨🇦 加拿大自动
+  - 🇦🇺 澳洲自动
+  - ♻️ 自动低延迟
+  - 🛟 故障切换
+  - 🚀 代理
+  - DIRECT
 - name: ✈️ Telegram
   type: select
   proxies:

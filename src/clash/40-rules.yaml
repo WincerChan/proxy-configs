@@ -2,6 +2,9 @@ rules:
 - RULE-SET,reject_domain,REJECT
 - RULE-SET,private_domain,DIRECT
 - RULE-SET,private_ip,DIRECT,no-resolve
+- DOMAIN,hound-jp.itswincer.net,🐕 Hound
+- DOMAIN,hound-robin-jp.itswincer.net,🐕 Hound
+- DOMAIN,arc-jp.hound.itswincer.net,🐕 Hound
 - RULE-SET,openai_domain,🤖 AI
 - DOMAIN-SUFFIX,chatgpt.com,🤖 AI
 - DOMAIN-SUFFIX,openai.com,🤖 AI
