@@ -24,7 +24,7 @@ proxies:
 
 ## Quantumult X
 
-QX 的中转组仍默认日本自动。
+QX 的中转组仍默认日本自动。节点选择、全局自动测速、故障切换及各地区自动组均排除 `land-` 开头的节点（不区分大小写），避免落地节点成为自身的中转；AI 组仍直接引用 `land-jp`。
 
 单独添加名为 `land-jp` 的落地节点，地址使用 `land.itswincer.net` 或其子域名，例如 `jp.land.itswincer.net`。不要把落地节点混入中转组的机场节点资源。
 

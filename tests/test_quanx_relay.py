@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import unittest
 
 from test_quanx_policy import load_static_policies
@@ -8,6 +9,37 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class QuanXRelayTests(unittest.TestCase):
+    def test_relay_candidates_exclude_landing_nodes(self):
+        samples = {
+            "🧭 节点选择": "JP 01",
+            "♻️ 自动低延迟": "JP 01",
+            "🛟 故障切换": "JP 01",
+            "🇭🇰 香港自动": "HK 01",
+            "🇹🇼 台湾自动": "TW 01",
+            "🇯🇵 日本自动": "JP 01",
+            "🇸🇬 新加坡自动": "SG 01",
+            "🇺🇸 美国自动": "US 01",
+            "🇰🇷 韩国自动": "KR 01",
+            "🇬🇧 英国自动": "UK 01",
+            "🇪🇺 欧洲自动": "Germany 01",
+            "🇨🇦 加拿大自动": "Canada 01",
+            "🇦🇺 澳洲自动": "AU 01",
+        }
+        for path in [ROOT / "src/quanx/20-policy.conf",
+                     ROOT / "dist/quanx/quantumultx-naixi-stable.conf"]:
+            policies = load_static_policies(path)
+            self.assertEqual(set(policies["♾️ 中转"]), set(samples))
+            for group, sample in samples.items():
+                with self.subTest(path=path, group=group):
+                    line = next(line for line in path.read_text().splitlines()
+                                if f" = {group}," in line)
+                    pattern = line.split("server-tag-regex=", 1)[1].split(", check-interval=", 1)[0]
+                    self.assertIsNotNone(re.search(pattern, sample))
+                    for node in ["land-jp", "LAND-JP", "land-" + sample,
+                                 "LaNd-" + sample, "Premium " + sample]:
+                        self.assertIsNone(re.search(pattern, node), node)
+            self.assertEqual(policies["🤖 AI"], ["land-jp"])
+
     def test_ai_rules_use_landing_node_and_tun(self):
         for base in [ROOT / "src/quanx", ROOT / "dist/quanx"]:
             with self.subTest(base=base):
