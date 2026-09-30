@@ -1,5 +1,5 @@
 # FlClash / Mihomo - Naixi final config with emoji policy groups
-# Fill proxy-providers.Naixi.url with your Naixi Clash/Mihomo subscription URL.
+# Add copied nodes to the top-level proxies list before loading this config.
 mixed-port: 7890
 allow-lan: false
 mode: rule
@@ -18,14 +18,9 @@ dns:
   nameserver:
   - 223.5.5.5
   - 119.29.29.29
-proxy-providers:
-  Naixi:
-    type: http
-    url: '' # todo
-    interval: 86400
-    path: ./providers/naixi.yaml
-    override:
-      udp: true
+# 将复制的完整节点列表填入这里，包含机场节点和 land-jp。
+# land-jp 节点需设置 dialer-proxy: ♾️ 中转。
+proxies: []
 proxy-groups:
 - name: ♾️ 中转
   type: select
@@ -62,25 +57,22 @@ proxy-groups:
   - DIRECT
 - name: 🧭 节点选择
   type: select
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i).*
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
 - name: 📊 流量看板
   type: select
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(剩余|流量|套餐|官网|到期|expire|traffic|reset|days left|expire date|^[0-9.]+[
     ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
 - name: ♻️ 自动低延迟
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
     ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
     ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -89,12 +81,11 @@ proxy-groups:
   lazy: false
 - name: 🛟 故障切换
   type: fallback
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(hong[ ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
     ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
     ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -380,10 +371,9 @@ proxy-groups:
   - DIRECT
 - name: 🇭🇰 香港自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(hong[ ]*kong|香港|港|HK)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -392,10 +382,9 @@ proxy-groups:
   lazy: false
 - name: 🇹🇼 台湾自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(taiwan|台湾|台北|taipei|TW)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -404,10 +393,9 @@ proxy-groups:
   lazy: false
 - name: 🇯🇵 日本自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(japan|日本|东京|大阪|tokyo|osaka|JP)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -416,10 +404,9 @@ proxy-groups:
   lazy: false
 - name: 🇸🇬 新加坡自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(singapore|新加坡|狮城|SG)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -428,10 +415,9 @@ proxy-groups:
   lazy: false
 - name: 🇺🇸 美国自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(usa|united[ ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z]))
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -440,10 +426,9 @@ proxy-groups:
   lazy: false
 - name: 🇰🇷 韩国自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(korea|韩国|首尔|seoul|KR)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -452,10 +437,9 @@ proxy-groups:
   lazy: false
 - name: 🇬🇧 英国自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(united[ ]*kingdom|britain|london|英国|伦敦|UK)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -464,10 +448,9 @@ proxy-groups:
   lazy: false
 - name: 🇪🇺 欧洲自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(netherlands|germany|switzerland|france|united[ ]*kingdom|sweden|bulgaria|austria|ireland|turkey|hungary|russia|moscow|petersburg|荷兰|德国|瑞士|法国|英国|瑞典|保加利亚|奥地利|爱尔兰|土耳其|匈牙利|俄罗斯)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -476,10 +459,9 @@ proxy-groups:
   lazy: false
 - name: 🇨🇦 加拿大自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(canada|加拿大|toronto|vancouver|CA)
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300
@@ -488,10 +470,9 @@ proxy-groups:
   lazy: false
 - name: 🇦🇺 澳洲自动
   type: url-test
-  use:
-  - Naixi
+  include-all-proxies: true
   filter: (?i)(australia|sydney|澳大利亚|澳洲|悉尼|(?:^|[^A-Za-z])AU(?:$|[^A-Za-z]))
-  exclude-filter: (?i)(premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
   url: http://www.gstatic.com/generate_204
   interval: 300

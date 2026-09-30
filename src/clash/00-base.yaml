@@ -1,5 +1,5 @@
 # FlClash / Mihomo - Naixi final config with emoji policy groups
-# Fill proxy-providers.Naixi.url with your Naixi Clash/Mihomo subscription URL.
+# Add copied nodes to the top-level proxies list before loading this config.
 mixed-port: 7890
 allow-lan: false
 mode: rule

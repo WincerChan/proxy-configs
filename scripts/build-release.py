@@ -7,7 +7,7 @@ DEFAULT_VERSION = "stable"
 
 CLASH_PARTS = [
     "00-base.yaml",
-    "10-proxy-providers.yaml",
+    "10-proxies.yaml",
     "20-proxy-groups.yaml",
     "30-rule-providers.yaml",
     "40-rules.yaml",

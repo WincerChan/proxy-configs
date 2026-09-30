@@ -1,0 +1,3 @@
+# 将复制的完整节点列表填入这里，包含机场节点和 land-jp。
+# land-jp 节点需设置 dialer-proxy: ♾️ 中转。
+proxies: []

@@ -7,7 +7,7 @@ except ImportError:
     yaml = None
 
 DEFAULT_PATH = Path("dist/clash/clash-naixi-stable.yaml")
-REQUIRED_KEYS = ["proxy-providers", "proxy-groups", "rules"]
+REQUIRED_KEYS = ["proxies", "proxy-groups", "rules"]
 REQUIRED_BUSINESS_PROXIES = [
     "🇭🇰 香港自动",
     "🇹🇼 台湾自动",

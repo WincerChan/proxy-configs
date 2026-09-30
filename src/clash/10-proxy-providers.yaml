@@ -1,8 +1,0 @@
-proxy-providers:
-  Naixi:
-    type: http
-    url: '' # todo
-    interval: 86400
-    path: ./providers/naixi.yaml
-    override:
-      udp: true
