@@ -1,0 +1,9 @@
+# Apple APNs / Push Notification Service
+# Used by iOS background push (Telegram, etc.)
+HOST-SUFFIX,push.apple.com,ApplePush
+HOST-SUFFIX,push-apple.com.akadns.net,ApplePush
+HOST-KEYWORD,push.apple,ApplePush
+HOST,courier.push.apple.com,ApplePush
+HOST,api.push.apple.com,ApplePush
+HOST,api2.push.apple.com,ApplePush
+HOST,api3.push.apple.com,ApplePush
