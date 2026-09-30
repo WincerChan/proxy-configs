@@ -19,6 +19,8 @@ REQUIRED_BUSINESS_PROXIES = [
     "🚀 代理",
 ]
 NON_BUSINESS_GROUPS = {
+    "♾️ 中转",
+    "🤖 AI",
     "🚀 代理",
     "🧭 节点选择",
     "📊 流量看板",
@@ -141,6 +143,9 @@ def validate(path: Path) -> int:
 
     if not groups:
         raise ValueError("Missing proxy group names")
+
+    if groups.get("🤖 AI") != ["land-jp"]:
+        raise ValueError("AI group must use land-jp exclusively")
 
     validate_business_groups(groups)
 

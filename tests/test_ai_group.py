@@ -1,21 +1,9 @@
 from pathlib import Path
 import unittest
 
+from test_validate_clash import load_validate_clash
 
 ROOT = Path(__file__).resolve().parents[1]
-REGION_GROUPS = [
-    "🇭🇰 香港自动",
-    "🇹🇼 台湾自动",
-    "🇯🇵 日本自动",
-    "🇸🇬 新加坡自动",
-    "🇺🇸 美国自动",
-    "🇰🇷 韩国自动",
-    "🇬🇧 英国自动",
-    "🇪🇺 欧洲自动",
-    "🇨🇦 加拿大自动",
-    "🇦🇺 澳洲自动",
-]
-
 
 def clash_ai_choices(path: Path) -> list[str]:
     lines = path.read_text(encoding="utf-8").splitlines()
@@ -34,18 +22,32 @@ def quanx_ai_choices(path: Path) -> list[str]:
 
 
 class AiGroupTests(unittest.TestCase):
-    def test_ai_offers_all_region_groups_and_manual_node_selection(self):
-        paths = {
-            "Clash": clash_ai_choices(ROOT / "dist/clash/clash-naixi-stable.yaml"),
-            "Quantumult X": quanx_ai_choices(
-                ROOT / "dist/quanx/quantumultx-naixi-stable.conf"
-            ),
-        }
-        for client, choices in paths.items():
-            with self.subTest(client=client):
-                self.assertEqual(choices[0], "🇺🇸 美国自动")
-                for group in REGION_GROUPS + ["🧭 节点选择"]:
-                    self.assertEqual(choices.count(group), 1, f"{client}: {group}")
+    def test_clash_relay_uses_only_airport_selection_groups(self):
+        validator = load_validate_clash()
+        for path in [ROOT / "src/clash/20-proxy-groups.yaml",
+                     ROOT / "dist/clash/clash-naixi-stable.yaml"]:
+            with self.subTest(path=path):
+                _, groups = validator.load_structure(path)
+                choices = groups["♾️ 中转"]
+                self.assertEqual(choices[0], "🇯🇵 日本自动")
+                self.assertIn("🧭 节点选择", choices)
+                for choice in choices:
+                    self.assertIn(choice, groups)
+                    self.assertTrue(choice.endswith("自动") or choice in {
+                        "🧭 节点选择", "♻️ 自动低延迟", "🛟 故障切换"
+                    })
+
+    def test_quanx_ai_uses_dedicated_landing_node(self):
+        self.assertEqual(
+            quanx_ai_choices(ROOT / "dist/quanx/quantumultx-naixi-stable.conf"),
+            ["land-jp"],
+        )
+
+    def test_clash_ai_uses_dedicated_landing_node(self):
+        for path in [ROOT / "src/clash/20-proxy-groups.yaml",
+                     ROOT / "dist/clash/clash-naixi-stable.yaml"]:
+            with self.subTest(path=path):
+                self.assertEqual(clash_ai_choices(path), ["land-jp"])
 
 
 if __name__ == "__main__":

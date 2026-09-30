@@ -14,6 +14,7 @@ REQUIRED_BUSINESS_POLICIES = [
     "🚀 代理",
 ]
 NON_BUSINESS_POLICIES = {
+    "♾️ 中转",
     "🚀 代理",
     "🧭 节点选择",
     "📊 流量看板",
@@ -47,7 +48,7 @@ class QuanXPolicyTests(unittest.TestCase):
             if name not in NON_BUSINESS_POLICIES
             and any(choice in choices for choice in REQUIRED_BUSINESS_POLICIES)
         }
-        self.assertIn("🤖 AI", business_policies)
+        self.assertEqual(policies["🤖 AI"], ["land-jp"])
         self.assertIn("🌍 Global", business_policies)
 
         for name, choices in business_policies.items():

@@ -32,7 +32,7 @@ class ValidateClashTests(unittest.TestCase):
         _, groups = validate_clash.load_structure(path)
 
         business_groups = validate_clash.business_groups(groups)
-        self.assertIn("🤖 AI", business_groups)
+        self.assertEqual(groups["🤖 AI"], ["land-jp"])
         self.assertIn("🌍 Global", business_groups)
 
         for name, proxies in business_groups.items():
