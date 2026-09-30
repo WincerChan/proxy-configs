@@ -1,20 +1,10 @@
 proxy-groups:
 - name: ♾️ 中转
   type: select
-  proxies:
-  - 🇯🇵 日本自动
-  - 🇸🇬 新加坡自动
-  - 🇭🇰 香港自动
-  - 🇹🇼 台湾自动
-  - 🇺🇸 美国自动
-  - 🇰🇷 韩国自动
-  - 🇬🇧 英国自动
-  - 🇪🇺 欧洲自动
-  - 🇨🇦 加拿大自动
-  - 🇦🇺 澳洲自动
-  - 🧭 节点选择
-  - ♻️ 自动低延迟
-  - 🛟 故障切换
+  include-all-proxies: true
+  filter: (?i).*
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
 - name: 🚀 代理
   type: select
   proxies:

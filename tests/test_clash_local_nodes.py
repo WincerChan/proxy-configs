@@ -16,7 +16,7 @@ class ClashLocalNodeTests(unittest.TestCase):
                 self.assertNotIn("proxy-providers:", text)
                 groups = text.split("- name: ")[1:]
                 dynamic = [group for group in groups if "  filter:" in group]
-                self.assertEqual(len(dynamic), 14)
+                self.assertEqual(len(dynamic), 15)
                 for group in dynamic:
                     name = group.splitlines()[0]
                     self.assertIn("  include-all-proxies: true", group, name)

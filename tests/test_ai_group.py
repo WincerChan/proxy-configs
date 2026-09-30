@@ -1,7 +1,6 @@
 from pathlib import Path
 import unittest
 
-from test_validate_clash import load_validate_clash
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -22,20 +21,17 @@ def quanx_ai_choices(path: Path) -> list[str]:
 
 
 class AiGroupTests(unittest.TestCase):
-    def test_clash_relay_uses_only_airport_selection_groups(self):
-        validator = load_validate_clash()
+    def test_clash_relay_selects_nodes_without_nested_groups(self):
         for path in [ROOT / "src/clash/20-proxy-groups.yaml",
                      ROOT / "dist/clash/clash-naixi-stable.yaml"]:
             with self.subTest(path=path):
-                _, groups = validator.load_structure(path)
-                choices = groups["♾️ 中转"]
-                self.assertEqual(choices[0], "🇯🇵 日本自动")
-                self.assertIn("🧭 节点选择", choices)
-                for choice in choices:
-                    self.assertIn(choice, groups)
-                    self.assertTrue(choice.endswith("自动") or choice in {
-                        "🧭 节点选择", "♻️ 自动低延迟", "🛟 故障切换"
-                    })
+                text = path.read_text()
+                relay = text.split("- name: ♾️ 中转\n", 1)[1].split("- name:", 1)[0]
+                self.assertIn("  type: select\n", relay)
+                self.assertIn("  include-all-proxies: true\n", relay)
+                self.assertNotIn("  proxies:", relay)
+                self.assertNotIn("  use:", relay)
+                self.assertNotIn("include-all:", relay)
 
     def test_quanx_ai_uses_dedicated_landing_node(self):
         self.assertEqual(

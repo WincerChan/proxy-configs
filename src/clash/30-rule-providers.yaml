@@ -47,13 +47,13 @@ rule-providers:
     path: ./rules/geolocation_not_cn.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
     proxy: 🚀 代理
-  openai_domain:
+  ai_domain:
     type: http
     behavior: domain
     format: mrs
     interval: 86400
-    path: ./rules/openai_domain.mrs
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs
+    path: ./rules/ai_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs
     proxy: 🚀 代理
   telegram_domain:
     type: http

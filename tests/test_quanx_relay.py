@@ -30,7 +30,7 @@ class QuanXRelayTests(unittest.TestCase):
                                      if ", 🤖 AI" not in line))
                 remote = next(line for line in read("50-filter-remote.conf").splitlines()
                               if "force-policy=🤖 AI" in line)
-                self.assertIn("OpenAI.list#via=%TUN%,", remote)
+                self.assertIn("category-ai-!cn.list#type=domain-set&via=%TUN%", remote)
                 self.assertIn("opt-parser=true", remote)
                 self.assertIn("resource_parser_url = https://raw.githubusercontent.com/"
                               "KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",

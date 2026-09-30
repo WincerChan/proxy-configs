@@ -24,20 +24,10 @@ proxies: []
 proxy-groups:
 - name: ♾️ 中转
   type: select
-  proxies:
-  - 🇯🇵 日本自动
-  - 🇸🇬 新加坡自动
-  - 🇭🇰 香港自动
-  - 🇹🇼 台湾自动
-  - 🇺🇸 美国自动
-  - 🇰🇷 韩国自动
-  - 🇬🇧 英国自动
-  - 🇪🇺 欧洲自动
-  - 🇨🇦 加拿大自动
-  - 🇦🇺 澳洲自动
-  - 🧭 节点选择
-  - ♻️ 自动低延迟
-  - 🛟 故障切换
+  include-all-proxies: true
+  filter: (?i).*
+  exclude-filter: (?i)(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
 - name: 🚀 代理
   type: select
   proxies:
@@ -528,13 +518,13 @@ rule-providers:
     path: ./rules/geolocation_not_cn.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs
     proxy: 🚀 代理
-  openai_domain:
+  ai_domain:
     type: http
     behavior: domain
     format: mrs
     interval: 86400
-    path: ./rules/openai_domain.mrs
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs
+    path: ./rules/ai_domain.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs
     proxy: 🚀 代理
   telegram_domain:
     type: http
@@ -703,22 +693,23 @@ rules:
 - DOMAIN,hound-jp.itswincer.net,🐕 Hound
 - DOMAIN,hound-robin-jp.itswincer.net,🐕 Hound
 - DOMAIN,arc-jp.hound.itswincer.net,🐕 Hound
-- RULE-SET,openai_domain,🤖 AI
+- RULE-SET,ai_domain,🤖 AI
 - DOMAIN-SUFFIX,chatgpt.com,🤖 AI
 - DOMAIN-SUFFIX,openai.com,🤖 AI
 - DOMAIN-SUFFIX,oaistatic.com,🤖 AI
 - DOMAIN-SUFFIX,oaiusercontent.com,🤖 AI
 - DOMAIN-SUFFIX,anthropic.com,🤖 AI
 - DOMAIN-SUFFIX,claude.ai,🤖 AI
+- DOMAIN-SUFFIX,clau.de,🤖 AI
+- DOMAIN-SUFFIX,claude.com,🤖 AI
+- DOMAIN-SUFFIX,claudeusercontent.com,🤖 AI
+- DOMAIN-SUFFIX,claudemcpclient.com,🤖 AI
+- DOMAIN-SUFFIX,claudemcpcontent.com,🤖 AI
 - DOMAIN-SUFFIX,perplexity.ai,🤖 AI
 - DOMAIN-SUFFIX,poe.com,🤖 AI
 - DOMAIN-SUFFIX,gemini.google.com,🤖 AI
 - DOMAIN-SUFFIX,ai.google.dev,🤖 AI
 - DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI
-- DOMAIN-KEYWORD,openai,🤖 AI
-- DOMAIN-KEYWORD,chatgpt,🤖 AI
-- DOMAIN-KEYWORD,anthropic,🤖 AI
-- DOMAIN-KEYWORD,claude,🤖 AI
 - DOMAIN-SUFFIX,binance.com,💰 Crypto
 - DOMAIN-SUFFIX,binance.us,💰 Crypto
 - DOMAIN-SUFFIX,bnbstatic.com,💰 Crypto
