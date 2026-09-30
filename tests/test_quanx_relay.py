@@ -90,7 +90,10 @@ class QuanXRelayTests(unittest.TestCase):
                     line.strip() for line in local_rules.splitlines()
                     if line.strip() and not line.lstrip().startswith(("#", ";"))
                 ]
-                self.assertEqual(rules[0], "host-suffix, land.itswincer.net, ♾️ 中转")
+                self.assertEqual(rules[:2], [
+                    "host-suffix, land.itswincer.net, ♾️ 中转",
+                    "host-suffix, edge.itswincer.net, ♾️ 中转",
+                ])
 
 
 if __name__ == "__main__":

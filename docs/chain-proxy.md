@@ -30,7 +30,7 @@ QX 的中转组仍默认日本自动。节点选择、全局自动测速、故�
 
 本地 AI 规则已添加 `via-interface=%TUN%`；远程 AI 规则通过 KOP-XIAO 资源解析器转换并添加该参数。导入后刷新远程规则，并检查生成的 AI 规则包含该参数。
 
-落地地址通过 `host-suffix, land.itswincer.net, ♾️ 中转` 匹配。需在 QX 日志确认回注后的连接命中这条规则。
+落地地址通过 `land.itswincer.net` 和 `edge.itswincer.net` 两条 `host-suffix` 规则匹配到 `♾️ 中转`，均覆盖域名本身及子域名。需在 QX 日志确认回注后的连接命中中转规则，而不是 Final。
 
 ## 客户端验证
 
