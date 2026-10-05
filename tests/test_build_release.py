@@ -24,14 +24,17 @@ class BuildReleaseTests(unittest.TestCase):
         build_release = load_build_release()
         clash_path = ROOT / "dist" / "clash" / "clash-naixi-stable.yaml"
         quanx_path = ROOT / "dist" / "quanx" / "quantumultx-naixi-stable.conf"
+        latch_path = ROOT / "dist" / "latch" / "latch-naixi-stable.yaml"
         expected_clash = clash_path.read_text(encoding="utf-8")
         expected_quanx = quanx_path.read_text(encoding="utf-8")
+        expected_latch = latch_path.read_text(encoding="utf-8")
 
         built_paths = build_release.build_all(version="stable", root=ROOT)
 
-        self.assertEqual([clash_path, quanx_path], built_paths)
+        self.assertEqual([clash_path, quanx_path, latch_path], built_paths)
         self.assertEqual(expected_clash, clash_path.read_text(encoding="utf-8"))
         self.assertEqual(expected_quanx, quanx_path.read_text(encoding="utf-8"))
+        self.assertEqual(expected_latch, latch_path.read_text(encoding="utf-8"))
 
     def test_custom_version_build_uses_requested_suffix(self):
         build_release = load_build_release()
@@ -46,6 +49,7 @@ class BuildReleaseTests(unittest.TestCase):
                 [
                     root / "dist" / "clash" / "clash-naixi-v-test.yaml",
                     root / "dist" / "quanx" / "quantumultx-naixi-v-test.conf",
+                    root / "dist" / "latch" / "latch-naixi-v-test.yaml",
                 ],
                 built_paths,
             )

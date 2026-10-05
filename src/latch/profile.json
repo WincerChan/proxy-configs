@@ -1,0 +1,17 @@
+{
+  "policyTargets": {},
+  "nodeGroups": {
+    "🤖 AI": {
+      "type": "select",
+      "filter": "^land-jp$"
+    }
+  },
+  "chains": {
+    "land-jp": "♾️ 中转"
+  },
+  "providerOverrides": {
+    "apple": {
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple_Classical.yaml"
+    }
+  }
+}

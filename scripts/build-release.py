@@ -1,5 +1,10 @@
 from argparse import ArgumentParser
+from copy import deepcopy
+import json
 from pathlib import Path
+from urllib.parse import urlsplit
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -73,10 +78,124 @@ def build_quanx(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
     return out_path
 
 
+def latch_document(root: Path = ROOT) -> dict:
+    """Adapt routing to Latch's node-only groups without importing credentials."""
+    source = yaml.safe_load(read_parts(root / "src" / "clash", CLASH_PARTS, "\n"))
+    settings = json.loads((root / "src" / "latch" / "profile.json").read_text(encoding="utf-8"))
+    groups = {group["name"]: group for group in source["proxy-groups"]}
+    if len(groups) != len(source["proxy-groups"]):
+        raise ValueError("Duplicate source group name")
+    fixed = settings.get("nodeGroups", {})
+    policies = settings.get("policyTargets", {})
+    overrides = settings.get("providerOverrides", {})
+    chains = settings.get("chains", {})
+    for name in set(fixed) | set(policies):
+        if name not in groups:
+            raise ValueError(f"Unknown source group: {name}")
+    for name, target in policies.items():
+        if name in fixed or target not in groups[name].get("proxies", []):
+            raise ValueError(f"Invalid policy choice for {name}: {target}")
+
+    native = {}
+    for name, group in groups.items():
+        if name in fixed:
+            native[name] = {"name": name, **fixed[name]}
+        elif group.get("include-all-proxies"):
+            pattern = group.get("filter", ".*").replace("(?i)", "")
+            exclude = group.get("exclude-filter", "").replace("(?i)", "")
+            if exclude:
+                pattern = f"^(?!.*(?:{exclude}))(?=.*(?:{pattern})).*$"
+            native[name] = {"name": name, "type": group["type"], "filter": pattern}
+    for name, group in native.items():
+        if group.get("type") not in {"select", "url-test", "fallback", "load-balance"} or not group.get("filter"):
+            raise ValueError(f"Invalid Latch node group: {name}")
+
+    node_names = {node["name"] for node in source.get("proxies", [])} | set(chains)
+
+    def resolve(name: str, seen: tuple = ()) -> str:
+        if name in native or name in {"DIRECT", "REJECT"} or name in node_names:
+            return name
+        if name in seen:
+            raise ValueError(f"Policy cycle: {' -> '.join((*seen, name))}")
+        if name not in groups or not groups[name].get("proxies"):
+            raise ValueError(f"Unresolved policy: {name}")
+        return resolve(policies.get(name, groups[name]["proxies"][0]), (*seen, name))
+
+    rules = []
+    used = set()
+    for raw in source["rules"]:
+        fields = [field.strip() for field in raw.split(",")]
+        index = 1 if fields[0] == "MATCH" else 2
+        if len(fields) <= index:
+            raise ValueError(f"Invalid source rule: {raw}")
+        fields[index] = resolve(fields[index])
+        if fields[0] == "RULE-SET":
+            used.add(fields[1])
+        rules.append(",".join(fields))
+    if sum(rule.startswith("MATCH,") for rule in rules) != 1 or not rules[-1].startswith("MATCH,"):
+        raise ValueError("Expected one final MATCH rule")
+    if set(overrides) - set(source["rule-providers"]):
+        raise ValueError("Provider override names must exist in source")
+    providers = {}
+    for name, original in source["rule-providers"].items():
+        if name not in used:
+            continue
+        provider = deepcopy(original)
+        provider.update(overrides.get(name, {}))
+        if provider.get("format") == "mrs":
+            url = urlsplit(provider["url"])
+            if url.hostname != "raw.githubusercontent.com" or not url.path.startswith("/MetaCubeX/meta-rules-dat/meta/geo/") or not url.path.endswith(".mrs") or url.query or url.fragment:
+                raise ValueError(f"No verified YAML equivalent for {name}")
+            provider["url"] = provider["url"][:-4] + ".yaml"
+            provider["format"] = "yaml"
+            if "path" in provider:
+                provider["path"] = str(Path(provider["path"]).with_suffix(".yaml"))
+        if provider.get("type") not in {"http", "file"} or provider.get("format", "yaml") not in {"yaml", "text"}:
+            raise ValueError(f"Unsupported Latch provider: {name}")
+        if provider.get("behavior") not in {"domain", "ipcidr", "classical"}:
+            raise ValueError(f"Unsupported provider behavior: {name}")
+        # The Latch provider contract has no per-download proxy selector.
+        allowed = {"type", "behavior", "format", "interval", "path", "url"}
+        providers[name] = {key: value for key, value in provider.items() if key in allowed}
+    if used - set(providers):
+        raise ValueError("Rules reference missing providers")
+
+    references = []
+    for name, via in chains.items():
+        if name in native or via not in native and via not in node_names:
+            raise ValueError(f"Invalid chain reference: {name} -> {via}")
+        seen = {name}
+        cursor = via
+        while cursor in chains:
+            if cursor in seen:
+                raise ValueError(f"Chain cycle at {cursor}")
+            seen.add(cursor)
+            cursor = chains[cursor]
+        if cursor in seen:
+            raise ValueError(f"Chain cycle at {cursor}")
+        references.append({"name": name, "dialer-proxy": via})
+    return {"proxies": references, "proxy-groups": list(native.values()), "rule-providers": providers, "rules": rules}
+
+
+def build_latch(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
+    document = latch_document(root)
+    output = (
+        "# Latch routing import; not a standalone latch-kernel startup config.\n"
+        "# Import real nodes first; land-jp must use Trojan or AnyTLS.\n"
+        "# Requires RULE-SET no-resolve and large-provider support; see docs/latch.md.\n"
+        + yaml.safe_dump(document, allow_unicode=True, sort_keys=False)
+    )
+    out_path = root / "dist" / "latch" / f"latch-naixi-{version}.yaml"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(output, encoding="utf-8")
+    return out_path
+
+
 def build_all(version: str = DEFAULT_VERSION, root: Path = ROOT) -> list[Path]:
     return [
         build_clash(version=version, root=root),
         build_quanx(version=version, root=root),
+        build_latch(version=version, root=root),
     ]
 
 
