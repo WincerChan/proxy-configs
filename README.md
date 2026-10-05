@@ -1,11 +1,12 @@
 # Proxy Configs
 
-个人代理配置项目，维护 Clash / Mihomo 和 Quantumult X 两套配置。
+个人代理配置项目，维护 Clash / Mihomo、Quantumult X 和 Latch 三套配置。
 
 ## 当前稳定版本
 
 - Clash / Mihomo: `dist/clash/clash-naixi-stable.yaml`
 - Quantumult X: `dist/quanx/quantumultx-naixi-stable.conf`
+- Latch: `dist/latch/latch-naixi-stable.yaml`（分流导入文件，适配说明见 [Latch 文档](docs/latch.md)）
 
 ## 设计原则
 
@@ -27,6 +28,8 @@
 - baidu.com → DIRECT
 
 ## 修改流程
+
+构建前运行 `python3 -m pip install -r requirements.txt`，再运行 `python3 scripts/build-release.py stable`，生成三份配置。Latch 独立策略选择在 `src/latch/profile.json` 中维护。
 
 1. 修改 `src/`
 2. 生成 `dist/`
