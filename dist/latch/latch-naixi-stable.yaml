@@ -1,6 +1,6 @@
 # Latch routing import; not a standalone latch-kernel startup config.
 # Import real nodes first; land-jp must use Trojan or AnyTLS.
-# Requires grouped policy import support; see docs/latch.md.
+# Requires policy-groups and conditions import support; see docs/latch.md.
 proxies:
 - name: land-jp
   dialer-proxy: ♾️ 中转
@@ -268,180 +268,6 @@ rule-providers:
     interval: 86400
     path: rules/facebook_domain.yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.yaml
-  🐕 Hound · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN,hound-jp.itswincer.net
-    - DOMAIN,hound-robin-jp.itswincer.net
-    - DOMAIN,arc-jp.hound.itswincer.net
-    interval: 0
-  🤖 AI · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,chatgpt.com
-    - DOMAIN-SUFFIX,openai.com
-    - DOMAIN-SUFFIX,oaistatic.com
-    - DOMAIN-SUFFIX,oaiusercontent.com
-    - DOMAIN-SUFFIX,anthropic.com
-    - DOMAIN-SUFFIX,claude.ai
-    - DOMAIN-SUFFIX,clau.de
-    - DOMAIN-SUFFIX,claude.com
-    - DOMAIN-SUFFIX,claudeusercontent.com
-    - DOMAIN-SUFFIX,claudemcpclient.com
-    - DOMAIN-SUFFIX,claudemcpcontent.com
-    - DOMAIN-SUFFIX,perplexity.ai
-    - DOMAIN-SUFFIX,poe.com
-    - DOMAIN-SUFFIX,gemini.google.com
-    - DOMAIN-SUFFIX,ai.google.dev
-    - DOMAIN-SUFFIX,copilot.microsoft.com
-    interval: 0
-  💰 Crypto · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,binance.com
-    - DOMAIN-SUFFIX,binance.us
-    - DOMAIN-SUFFIX,bnbstatic.com
-    - DOMAIN-SUFFIX,okx.com
-    - DOMAIN-SUFFIX,bybit.com
-    - DOMAIN-SUFFIX,bitget.com
-    - DOMAIN-SUFFIX,gate.io
-    - DOMAIN-SUFFIX,kucoin.com
-    - DOMAIN-SUFFIX,coinbase.com
-    - DOMAIN-SUFFIX,kraken.com
-    - DOMAIN-SUFFIX,bitfinex.com
-    - DOMAIN-SUFFIX,mexc.com
-    - DOMAIN-SUFFIX,bithumb.com
-    - DOMAIN-SUFFIX,upbit.com
-    - DOMAIN-SUFFIX,coingecko.com
-    - DOMAIN-SUFFIX,coinmarketcap.com
-    - DOMAIN-SUFFIX,tradingview.com
-    - DOMAIN-KEYWORD,binance
-    - DOMAIN-KEYWORD,bybit
-    - DOMAIN-KEYWORD,okx
-    interval: 0
-  📺 DisneyPlus · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,disneyplus.com
-    - DOMAIN-SUFFIX,disney-plus.net
-    - DOMAIN-SUFFIX,dssott.com
-    - DOMAIN-SUFFIX,bamgrid.com
-    interval: 0
-  🍎 Apple推送 · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,push.apple.com
-    - DOMAIN-SUFFIX,push-apple.com.akadns.net
-    - DOMAIN-KEYWORD,push.apple
-    - DOMAIN,courier.push.apple.com
-    - DOMAIN,api.push.apple.com
-    - DOMAIN,api2.push.apple.com
-    - DOMAIN,api3.push.apple.com
-    interval: 0
-  📘 Social · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,facebook.com
-    - DOMAIN-SUFFIX,fbcdn.net
-    - DOMAIN-SUFFIX,instagram.com
-    - DOMAIN-SUFFIX,cdninstagram.com
-    - DOMAIN-SUFFIX,whatsapp.com
-    - DOMAIN-SUFFIX,discord.com
-    - DOMAIN-SUFFIX,discordapp.com
-    - DOMAIN-SUFFIX,reddit.com
-    - DOMAIN-SUFFIX,redd.it
-    interval: 0
-  📦 Steam 下载CDN · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN,edge.steam-dns.top.comcast.net
-    - DOMAIN,alibaba.cdn.steampipe.steamcontent.com
-    - DOMAIN-SUFFIX,steamcontent.com
-    - DOMAIN-SUFFIX,steamserver.net
-    - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net
-    - DOMAIN-SUFFIX,steampipe.akamaized.net
-    - DOMAIN-SUFFIX,steampipe-kr.akamaized.net
-    - DOMAIN-SUFFIX,steampipe-partner.akamaized.net
-    - DOMAIN-SUFFIX,steam.apac.qtlglb.com
-    - DOMAIN-SUFFIX,steam.eca.qtlglb.com
-    - DOMAIN-SUFFIX,steam.naeu.qtlglb.com
-    - DOMAIN-SUFFIX,steam.ru.qtlglb.com
-    - DOMAIN-SUFFIX,steam.cdn.on.net
-    - DOMAIN-SUFFIX,steam.cdn.webra.ru
-    - DOMAIN-SUFFIX,steam.cdn.orcon.net.nz
-    - DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz
-    - DOMAIN-SUFFIX,cdn-ali.content.steamchina.com
-    - DOMAIN-SUFFIX,cdn-qc.content.steamchina.com
-    - DOMAIN-SUFFIX,cdn-ws.content.steamchina.com
-    - DOMAIN-SUFFIX,dl.steam.clngaa.com
-    - DOMAIN-SUFFIX,dl.steam.ksyna.com
-    - DOMAIN-SUFFIX,st.dl.bscstorage.net
-    - DOMAIN-SUFFIX,st.dl.eccdnx.com
-    - DOMAIN-SUFFIX,st.dl.pinyuncloud.com
-    - DOMAIN-SUFFIX,client-update.queniuqe.com
-    - DOMAIN-SUFFIX,steamcontent.tnkjmec.com
-    - DOMAIN-SUFFIX,steampowered.com.8686c.com
-    - DOMAIN-SUFFIX,steamstatic.com.8686c.com
-    - DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net
-    - DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net
-    interval: 0
-  🛒 Steam 商店支付 · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,store.steampowered.com
-    - DOMAIN-SUFFIX,checkout.steampowered.com
-    - DOMAIN-SUFFIX,help.steampowered.com
-    - DOMAIN-SUFFIX,steamstore-a.akamaihd.net
-    - DOMAIN-SUFFIX,steamstatic.com
-    - DOMAIN-SUFFIX,steampowered.com
-    interval: 0
-  🎮 Steam 登录社区 · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,steamcommunity.com
-    - DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net
-    - DOMAIN-SUFFIX,steam-chat.com
-    - DOMAIN-SUFFIX,steam-api.com
-    - DOMAIN-SUFFIX,steamusercontent.com
-    - DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net
-    - DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net
-    - DOMAIN-SUFFIX,steamvideo-a.akamaihd.net
-    - DOMAIN-SUFFIX,steambroadcast.akamaized.net
-    - DOMAIN-SUFFIX,steammobile.akamaized.net
-    - DOMAIN-SUFFIX,steam.tv
-    - DOMAIN-SUFFIX,s.team
-    - DOMAIN-SUFFIX,steamconnecttest.com
-    - DOMAIN-SUFFIX,valve.net
-    - DOMAIN-SUFFIX,valvesoftware.com
-    - DOMAIN-SUFFIX,steamgames.com
-    - DOMAIN-SUFFIX,steamdeck.com
-    - DOMAIN-SUFFIX,steamchina.com
-    - DOMAIN-SUFFIX,wmsjsteam.com
-    - DOMAIN-SUFFIX,csgo.com.cn
-    - DOMAIN-SUFFIX,csgo.wmsj.cn
-    - DOMAIN-SUFFIX,dota2.com.cn
-    - DOMAIN-SUFFIX,dota2.wmsj.cn
-    interval: 0
-  🎮 Games · 本地:
-    type: inline
-    behavior: classical
-    payload:
-    - DOMAIN-SUFFIX,epicgames.com
-    - DOMAIN-SUFFIX,unrealengine.com
-    - DOMAIN-SUFFIX,battle.net
-    - DOMAIN-SUFFIX,blizzard.com
-    - DOMAIN-SUFFIX,ea.com
-    - DOMAIN-SUFFIX,ubisoft.com
-    interval: 0
 policy-groups:
 - name: 拦截
   target: REJECT
@@ -455,17 +281,56 @@ policy-groups:
   options: no-resolve
 - name: 🐕 Hound
   target: 🇯🇵 日本自动
-  rule-sets:
-  - 🐕 Hound · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN,hound-jp.itswincer.net
+  - DOMAIN,hound-robin-jp.itswincer.net
+  - DOMAIN,arc-jp.hound.itswincer.net
 - name: 🤖 AI
   target: 🤖 AI
   rule-sets:
   - ai_domain
-  - 🤖 AI · 本地
+  conditions:
+  - DOMAIN-SUFFIX,chatgpt.com
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+  - DOMAIN-SUFFIX,anthropic.com
+  - DOMAIN-SUFFIX,claude.ai
+  - DOMAIN-SUFFIX,clau.de
+  - DOMAIN-SUFFIX,claude.com
+  - DOMAIN-SUFFIX,claudeusercontent.com
+  - DOMAIN-SUFFIX,claudemcpclient.com
+  - DOMAIN-SUFFIX,claudemcpcontent.com
+  - DOMAIN-SUFFIX,perplexity.ai
+  - DOMAIN-SUFFIX,poe.com
+  - DOMAIN-SUFFIX,gemini.google.com
+  - DOMAIN-SUFFIX,ai.google.dev
+  - DOMAIN-SUFFIX,copilot.microsoft.com
 - name: 💰 Crypto
   target: 🧭 节点选择
-  rule-sets:
-  - 💰 Crypto · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,binance.com
+  - DOMAIN-SUFFIX,binance.us
+  - DOMAIN-SUFFIX,bnbstatic.com
+  - DOMAIN-SUFFIX,okx.com
+  - DOMAIN-SUFFIX,bybit.com
+  - DOMAIN-SUFFIX,bitget.com
+  - DOMAIN-SUFFIX,gate.io
+  - DOMAIN-SUFFIX,kucoin.com
+  - DOMAIN-SUFFIX,coinbase.com
+  - DOMAIN-SUFFIX,kraken.com
+  - DOMAIN-SUFFIX,bitfinex.com
+  - DOMAIN-SUFFIX,mexc.com
+  - DOMAIN-SUFFIX,bithumb.com
+  - DOMAIN-SUFFIX,upbit.com
+  - DOMAIN-SUFFIX,coingecko.com
+  - DOMAIN-SUFFIX,coinmarketcap.com
+  - DOMAIN-SUFFIX,tradingview.com
+  - DOMAIN-KEYWORD,binance
+  - DOMAIN-KEYWORD,bybit
+  - DOMAIN-KEYWORD,okx
 - name: ✈️ Telegram
   target: 🇸🇬 新加坡自动
   rule-sets:
@@ -482,7 +347,11 @@ policy-groups:
   target: 🇯🇵 日本自动
   rule-sets:
   - disney_domain
-  - 📺 DisneyPlus · 本地
+  conditions:
+  - DOMAIN-SUFFIX,disneyplus.com
+  - DOMAIN-SUFFIX,disney-plus.net
+  - DOMAIN-SUFFIX,dssott.com
+  - DOMAIN-SUFFIX,bamgrid.com
 - name: 📺 YouTube
   target: ♻️ 自动低延迟
   rule-sets:
@@ -516,8 +385,15 @@ policy-groups:
   - onedrive_domain
 - name: 🍎 Apple推送
   target: 🧭 节点选择
-  rule-sets:
-  - 🍎 Apple推送 · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,push.apple.com
+  - DOMAIN-SUFFIX,push-apple.com.akadns.net
+  - DOMAIN-KEYWORD,push.apple
+  - DOMAIN,courier.push.apple.com
+  - DOMAIN,api.push.apple.com
+  - DOMAIN,api2.push.apple.com
+  - DOMAIN,api3.push.apple.com
 - name: 🍎 Apple
   target: DIRECT
   rule-sets:
@@ -537,24 +413,98 @@ policy-groups:
   target: 🧭 节点选择
   rule-sets:
   - facebook_domain
-  - 📘 Social · 本地
+  conditions:
+  - DOMAIN-SUFFIX,facebook.com
+  - DOMAIN-SUFFIX,fbcdn.net
+  - DOMAIN-SUFFIX,instagram.com
+  - DOMAIN-SUFFIX,cdninstagram.com
+  - DOMAIN-SUFFIX,whatsapp.com
+  - DOMAIN-SUFFIX,discord.com
+  - DOMAIN-SUFFIX,discordapp.com
+  - DOMAIN-SUFFIX,reddit.com
+  - DOMAIN-SUFFIX,redd.it
 - name: 📦 Steam 下载CDN
   target: DIRECT
-  rule-sets:
-  - 📦 Steam 下载CDN · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN,edge.steam-dns.top.comcast.net
+  - DOMAIN,alibaba.cdn.steampipe.steamcontent.com
+  - DOMAIN-SUFFIX,steamcontent.com
+  - DOMAIN-SUFFIX,steamserver.net
+  - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net
+  - DOMAIN-SUFFIX,steampipe.akamaized.net
+  - DOMAIN-SUFFIX,steampipe-kr.akamaized.net
+  - DOMAIN-SUFFIX,steampipe-partner.akamaized.net
+  - DOMAIN-SUFFIX,steam.apac.qtlglb.com
+  - DOMAIN-SUFFIX,steam.eca.qtlglb.com
+  - DOMAIN-SUFFIX,steam.naeu.qtlglb.com
+  - DOMAIN-SUFFIX,steam.ru.qtlglb.com
+  - DOMAIN-SUFFIX,steam.cdn.on.net
+  - DOMAIN-SUFFIX,steam.cdn.webra.ru
+  - DOMAIN-SUFFIX,steam.cdn.orcon.net.nz
+  - DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz
+  - DOMAIN-SUFFIX,cdn-ali.content.steamchina.com
+  - DOMAIN-SUFFIX,cdn-qc.content.steamchina.com
+  - DOMAIN-SUFFIX,cdn-ws.content.steamchina.com
+  - DOMAIN-SUFFIX,dl.steam.clngaa.com
+  - DOMAIN-SUFFIX,dl.steam.ksyna.com
+  - DOMAIN-SUFFIX,st.dl.bscstorage.net
+  - DOMAIN-SUFFIX,st.dl.eccdnx.com
+  - DOMAIN-SUFFIX,st.dl.pinyuncloud.com
+  - DOMAIN-SUFFIX,client-update.queniuqe.com
+  - DOMAIN-SUFFIX,steamcontent.tnkjmec.com
+  - DOMAIN-SUFFIX,steampowered.com.8686c.com
+  - DOMAIN-SUFFIX,steamstatic.com.8686c.com
+  - DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net
+  - DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net
 - name: 🛒 Steam 商店支付
   target: DIRECT
-  rule-sets:
-  - 🛒 Steam 商店支付 · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,store.steampowered.com
+  - DOMAIN-SUFFIX,checkout.steampowered.com
+  - DOMAIN-SUFFIX,help.steampowered.com
+  - DOMAIN-SUFFIX,steamstore-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamstatic.com
+  - DOMAIN-SUFFIX,steampowered.com
 - name: 🎮 Steam 登录社区
   target: 🧭 节点选择
-  rule-sets:
-  - 🎮 Steam 登录社区 · 本地
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,steamcommunity.com
+  - DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net
+  - DOMAIN-SUFFIX,steam-chat.com
+  - DOMAIN-SUFFIX,steam-api.com
+  - DOMAIN-SUFFIX,steamusercontent.com
+  - DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamvideo-a.akamaihd.net
+  - DOMAIN-SUFFIX,steambroadcast.akamaized.net
+  - DOMAIN-SUFFIX,steammobile.akamaized.net
+  - DOMAIN-SUFFIX,steam.tv
+  - DOMAIN-SUFFIX,s.team
+  - DOMAIN-SUFFIX,steamconnecttest.com
+  - DOMAIN-SUFFIX,valve.net
+  - DOMAIN-SUFFIX,valvesoftware.com
+  - DOMAIN-SUFFIX,steamgames.com
+  - DOMAIN-SUFFIX,steamdeck.com
+  - DOMAIN-SUFFIX,steamchina.com
+  - DOMAIN-SUFFIX,wmsjsteam.com
+  - DOMAIN-SUFFIX,csgo.com.cn
+  - DOMAIN-SUFFIX,csgo.wmsj.cn
+  - DOMAIN-SUFFIX,dota2.com.cn
+  - DOMAIN-SUFFIX,dota2.wmsj.cn
 - name: 🎮 Games
   target: 🧭 节点选择
   rule-sets:
   - games_domain
-  - 🎮 Games · 本地
+  conditions:
+  - DOMAIN-SUFFIX,epicgames.com
+  - DOMAIN-SUFFIX,unrealengine.com
+  - DOMAIN-SUFFIX,battle.net
+  - DOMAIN-SUFFIX,blizzard.com
+  - DOMAIN-SUFFIX,ea.com
+  - DOMAIN-SUFFIX,ubisoft.com
 - name: 🇨🇳 直连
   target: DIRECT
   rule-sets:

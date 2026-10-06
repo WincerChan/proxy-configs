@@ -96,14 +96,7 @@ def latch_policy_groups(source_rules: list[str], resolved_rules: list[str], prov
                 raise ValueError(f"Mixed IP resolution semantics in policy: {policy['name']}")
             policy['options'] = 'no-resolve'
         if local_payload:
-            base = policy['name'] + ' · 本地'
-            name = base
-            suffix = 2
-            while name in providers:
-                name = f'{base} ({suffix})'
-                suffix += 1
-            providers[name] = {'type': 'inline', 'behavior': 'classical', 'payload': list(local_payload), 'interval': 0}
-            policy['rule-sets'].append(name)
+            policy['conditions'] = list(local_payload)
 
     previous = None
     for original, resolved in zip(source_rules, resolved_rules):
@@ -246,7 +239,7 @@ def build_latch(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
     output = (
         "# Latch routing import; not a standalone latch-kernel startup config.\n"
         "# Import real nodes first; land-jp must use Trojan or AnyTLS.\n"
-        "# Requires grouped policy import support; see docs/latch.md.\n"
+        "# Requires policy-groups and conditions import support; see docs/latch.md.\n"
         + yaml.safe_dump(document, allow_unicode=True, sort_keys=False)
     )
     out_path = root / "dist" / "latch" / f"latch-naixi-{version}.yaml"

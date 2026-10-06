@@ -35,12 +35,15 @@ def validate(path: Path) -> dict:
         target = policy['target']
         if target not in groups and target not in nodes and target not in {"DIRECT", "REJECT"}:
             raise ValueError(f"Unresolved rule target: {target}")
-        if not policy['name'] or policy['name'] in names or not policy['rule-sets'] or len(set(policy['rule-sets'])) != len(policy['rule-sets']):
+        if not policy['name'] or policy['name'] in names or not (policy['rule-sets'] or policy.get('conditions')) or len(set(policy['rule-sets'])) != len(policy['rule-sets']):
             raise ValueError('Policy names and set references must be nonempty and unique')
+        conditions = policy.get('conditions', [])
+        if not isinstance(conditions, list) or any(not isinstance(x, str) or len(x.split(',')) not in {2, 3} for x in conditions):
+            raise ValueError('Invalid policy conditions')
         names.add(policy['name'])
         if set(policy['rule-sets']) - set(providers):
             raise ValueError('Policy references unknown rule sets')
-        if set(policy) - {'name','target','rule-sets','options'} or policy.get('options','') not in {'','no-resolve'}:
+        if set(policy) - {'name','target','rule-sets','conditions','options'} or policy.get('options','') not in {'','no-resolve'}:
             raise ValueError('Unsupported policy fields or options')
     if document.get('fallback') not in groups and document.get('fallback') not in nodes and document.get('fallback') not in {'DIRECT','REJECT'}:
         raise ValueError('Expected a known fallback target')
@@ -116,7 +119,7 @@ def verify_business(path: Path, business: str | None, kernel: str | None, downlo
     if len(current['rules']) != len(source['policy-groups'])+1:
         raise ValueError('Policy import flattened grouped rules')
     for actual, expected in zip(current['rules'], source['policy-groups']):
-        if actual['name'] != expected['name'] or actual['values'] != expected['rule-sets'] or actual['options'] != expected.get('options',''):
+        if actual['name'] != expected['name'] or actual['values'] != expected['rule-sets'] or actual['options'] != expected.get('options','') or actual.get('conditions',[]) != expected.get('conditions',[]):
             raise ValueError('Policy name, set nesting or options changed during import')
     imported = call("import.profile", {"document": document, "config": config, "name": "Latch fixture"})
     config, profile = imported["config"], imported["profile"]

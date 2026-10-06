@@ -18,6 +18,8 @@ class LatchConfigTests(unittest.TestCase):
     def target(self, rule_prefix):
         kind, value = rule_prefix.split(',', 1)
         for policy in self.document['policy-groups']:
+            if any(line.split(',')[:2] == [kind, value] for line in policy.get('conditions', [])):
+                return policy['target']
             for ref in policy['rule-sets']:
                 if kind == 'RULE-SET' and ref == value:
                     return policy['target']
@@ -70,7 +72,7 @@ class LatchConfigTests(unittest.TestCase):
         self.assertEqual(len(runs), len(self.document['policy-groups']))
         for (name, lines), policy in zip(runs, self.document['policy-groups']):
             self.assertEqual({'DIRECT':'直连','REJECT':'拦截'}.get(name,name), policy['name'])
-            actual = []
+            actual = list(policy.get('conditions', []))
             for ref in policy['rule-sets']:
                 provider = self.document['rule-providers'][ref]
                 if provider['type'] == 'inline':
@@ -87,11 +89,26 @@ class LatchConfigTests(unittest.TestCase):
     def test_named_policies_contain_multiple_rule_sets(self):
         policies = {x['name']: x for x in self.document['policy-groups']}
         self.assertEqual(['telegram_domain','telegram_ip'], policies['✈️ Telegram']['rule-sets'])
-        self.assertEqual(['ai_domain','🤖 AI · 本地'], policies['🤖 AI']['rule-sets'])
-        self.assertEqual(20, len(self.document['rule-providers']['💰 Crypto · 本地']['payload']))
+        self.assertEqual(['ai_domain'], policies['🤖 AI']['rule-sets'])
+        self.assertEqual(20, len(policies['💰 Crypto']['conditions']))
         self.assertEqual(27, len(self.document['policy-groups'])+1)
         self.assertNotIn('rules', self.document)
+        self.assertEqual(27, len(self.document['rule-providers']))
+        self.assertFalse(any(p['type'] == 'inline' for p in self.document['rule-providers'].values()))
         self.assertNotEqual(policies['📦 Steam 下载CDN']['name'], policies['🛒 Steam 商店支付']['name'])
+
+    def test_local_conditions_do_not_mutate_rule_provider_collection(self):
+        providers = {'remote': {'type': 'http', 'behavior': 'domain'}}
+        source = ['DOMAIN,first.test,A', 'RULE-SET,remote,A',
+                  'IP-CIDR,10.0.0.0/8,A,no-resolve', 'DOMAIN,last.test,B', 'MATCH,DIRECT']
+        resolved = [line.replace(',A', ',DIRECT').replace(',B', ',REJECT') for line in source]
+        policies = self.build.latch_policy_groups(source, resolved, providers)
+        self.assertEqual({'remote': {'type': 'http', 'behavior': 'domain'}}, providers)
+        self.assertEqual(['remote'], policies[0]['rule-sets'])
+        self.assertEqual(['DOMAIN,first.test', 'IP-CIDR,10.0.0.0/8,no-resolve'], policies[0]['conditions'])
+        self.assertEqual([], policies[1]['rule-sets'])
+        self.assertEqual(['DOMAIN,last.test'], policies[1]['conditions'])
+        self.assertEqual(['DIRECT', 'REJECT'], [p['target'] for p in policies])
 
     def test_disjoint_policy_runs_keep_priority_and_mixed_resolution_is_rejected(self):
         source = ['DOMAIN,a.test,A','DOMAIN,b.test,B','DOMAIN,c.test,A','MATCH,DIRECT']
