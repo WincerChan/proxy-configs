@@ -27,22 +27,28 @@ def validate(path: Path) -> dict:
             raise ValueError("Latch import groups must be node matchers")
         re.compile(group["filter"], re.IGNORECASE)
     providers = document["rule-providers"]
-    matches = 0
-    for index, raw in enumerate(document["rules"]):
-        fields = raw.split(",")
-        kind = fields[0]
-        target = fields[1] if kind == "MATCH" else fields[2]
+    policies = document.get('policy-groups')
+    if not isinstance(policies,list) or not policies or 'rules' in document:
+        raise ValueError('Expected named policy-groups, not flattened rules')
+    names = set()
+    for policy in policies:
+        target = policy['target']
         if target not in groups and target not in nodes and target not in {"DIRECT", "REJECT"}:
             raise ValueError(f"Unresolved rule target: {target}")
-        if kind == "RULE-SET" and fields[1] not in providers:
-            raise ValueError(f"Unknown provider: {fields[1]}")
-        if kind == "MATCH":
-            matches += 1
-            if index != len(document["rules"]) - 1:
-                raise ValueError("MATCH must be last")
-    if matches != 1:
-        raise ValueError("Expected one MATCH")
+        if not policy['name'] or policy['name'] in names or not policy['rule-sets'] or len(set(policy['rule-sets'])) != len(policy['rule-sets']):
+            raise ValueError('Policy names and set references must be nonempty and unique')
+        names.add(policy['name'])
+        if set(policy['rule-sets']) - set(providers):
+            raise ValueError('Policy references unknown rule sets')
+        if set(policy) - {'name','target','rule-sets','options'} or policy.get('options','') not in {'','no-resolve'}:
+            raise ValueError('Unsupported policy fields or options')
+    if document.get('fallback') not in groups and document.get('fallback') not in nodes and document.get('fallback') not in {'DIRECT','REJECT'}:
+        raise ValueError('Expected a known fallback target')
     for provider in providers.values():
+        if provider.get('type') == 'inline':
+            if set(provider) != {'type','behavior','payload','interval'} or provider['behavior'] != 'classical' or not provider['payload'] or not all(isinstance(x,str) for x in provider['payload']):
+                raise ValueError('Invalid local rule set')
+            continue
         if provider.get("format") != "yaml" or set(provider) - {"type", "behavior", "format", "interval", "path", "url"}:
             raise ValueError("Unsupported Latch provider contract")
     for node in document["proxies"]:
@@ -64,7 +70,8 @@ def fetch_providers(document: dict) -> dict:
         return name, data, len(payload)
 
     with ThreadPoolExecutor(max_workers=6) as pool:
-        return {name: (data, count) for name, data, count in pool.map(fetch, document["rule-providers"].items())}
+        remote = [(name,p) for name,p in document['rule-providers'].items() if p['type']=='http']
+        return {name: (data, count) for name, data, count in pool.map(fetch, remote)}
 
 
 def verify_business(path: Path, business: str | None, kernel: str | None, downloaded: dict, dll_path: str | None = None) -> dict:
@@ -100,9 +107,17 @@ def verify_business(path: Path, business: str | None, kernel: str | None, downlo
     config = {
         "schema": 1, "nodes": nodes, "groups": [], "activeProfile": "initial",
         "profiles": [{"id": "initial", "name": "Initial", "rules": [{"id": "fallback", "name": "Fallback", "type": "MATCH", "values": [], "target": "DIRECT", "enabled": True}], "chains": {}, "providers": {}}],
-        "settings": {"kernel": "latch", "mode": "rule", "port": 7890, "allowLan": False, "ipv6": False, "logLevel": "info", "tun": False, "stack": "mixed", "dnsMode": "redir-host", "dns": ["1.1.1.1"], "testUrl": "https://www.gstatic.com/generate_204", "defaultExit": "DIRECT"},
+        "settings": {"mode": "rule", "port": 7890, "allowLan": False, "ipv6": False, "logLevel": "info", "tun": False, "stack": "mixed", "dnsMode": "redir-host", "dns": ["1.1.1.1"], "testUrl": "https://www.gstatic.com/generate_204", "defaultExit": "DIRECT"},
     }
     document = call("import.parse", {"text": path.read_text(encoding="utf-8")})
+    source = validate(path)
+    policies = call('config.importPolicies', {'document':document, 'config':config, 'mode':'replace'})
+    current = next(p for p in policies['profiles'] if p['id']==policies['activeProfile'])
+    if len(current['rules']) != len(source['policy-groups'])+1:
+        raise ValueError('Policy import flattened grouped rules')
+    for actual, expected in zip(current['rules'], source['policy-groups']):
+        if actual['name'] != expected['name'] or actual['values'] != expected['rule-sets'] or actual['options'] != expected.get('options',''):
+            raise ValueError('Policy name, set nesting or options changed during import')
     imported = call("import.profile", {"document": document, "config": config, "name": "Latch fixture"})
     config, profile = imported["config"], imported["profile"]
     config["profiles"].append(profile)
@@ -141,7 +156,7 @@ def verify_business(path: Path, business: str | None, kernel: str | None, downlo
             config_path = temp / "compiled.json"
             config_path.write_text(json.dumps(compiled), encoding="utf-8")
             subprocess.run([kernel, "check", "-c", str(config_path), "-d", str(temp)], capture_output=True, text=True, check=True)
-    return {"businessImportCompile": True, "groupMatching": True, "chainDirection": True, "missingLandingRejected": True, "kernelLoadsRealProviders": bool(kernel)}
+    return {"businessImportCompile": True, "groupedPolicyImport":True, "groupMatching": True, "chainDirection": True, "missingLandingRejected": True, "kernelLoadsRealProviders": bool(kernel)}
 
 
 def main():
@@ -157,7 +172,7 @@ def main():
         parser.error("--kernel requires --business or --business-dll")
     document = validate(args.path)
     downloaded = fetch_providers(document) if args.online else {}
-    report = {"groups": len(document["proxy-groups"]), "providers": len(document["rule-providers"]), "rules": len(document["rules"]), "onlineProviders": {name: {"bytes": len(data), "entries": count} for name, (data, count) in downloaded.items()}}
+    report = {"groups": len(document["proxy-groups"]), "providers": len(document["rule-providers"]), "policyGroups": len(document["policy-groups"])+1, "onlineProviders": {name: {"bytes": len(data), "entries": count} for name, (data, count) in downloaded.items()}}
     if args.business or args.business_dll:
         report.update(verify_business(args.path, args.business, args.kernel, downloaded, args.business_dll))
     print(json.dumps(report, ensure_ascii=False, indent=2))

@@ -16,8 +16,15 @@ class LatchConfigTests(unittest.TestCase):
         self.document = self.build.latch_document()
 
     def target(self, rule_prefix):
-        rule = next(rule for rule in self.document["rules"] if rule.startswith(rule_prefix + ","))
-        return rule.split(",")[2]
+        kind, value = rule_prefix.split(',', 1)
+        for policy in self.document['policy-groups']:
+            for ref in policy['rule-sets']:
+                if kind == 'RULE-SET' and ref == value:
+                    return policy['target']
+                provider = self.document['rule-providers'][ref]
+                if provider['type'] == 'inline' and any(line.split(',')[:2] == [kind, value] for line in provider['payload']):
+                    return policy['target']
+        self.fail(f'Missing rule: {rule_prefix}')
 
     def test_daily_default_routes_and_chain(self):
         self.assertEqual("🤖 AI", self.target("DOMAIN-SUFFIX,chatgpt.com"))
@@ -48,7 +55,7 @@ class LatchConfigTests(unittest.TestCase):
 
     def test_providers_and_rule_options_preserve_source(self):
         source = yaml.safe_load((ROOT / "src/clash/30-rule-providers.yaml").read_text())["rule-providers"]
-        providers = self.document["rule-providers"]
+        providers = {k:v for k,v in self.document["rule-providers"].items() if v['type'] != 'inline'}
         self.assertEqual(set(source), set(providers))
         for name, provider in providers.items():
             self.assertEqual("yaml", provider["format"])
@@ -58,12 +65,42 @@ class LatchConfigTests(unittest.TestCase):
             self.assertFalse(provider["path"].endswith(".mrs"))
         self.assertTrue(providers["apple"]["url"].endswith("/Apple_Classical.yaml"))
         source_rules = yaml.safe_load((ROOT / "src/clash/40-rules.yaml").read_text())["rules"]
-        self.assertEqual(len(source_rules), len(self.document["rules"]))
-        for original, adapted in zip(source_rules, self.document["rules"]):
-            left, right = original.split(","), adapted.split(",")
-            index = 1 if left[0] == "MATCH" else 2
-            self.assertEqual(left[:index], right[:index])
-            self.assertEqual(left[index + 1:], right[index + 1:])
+        import itertools
+        runs = [(name, list(lines)) for name, lines in itertools.groupby(source_rules[:-1], lambda line: line.split(',')[2])]
+        self.assertEqual(len(runs), len(self.document['policy-groups']))
+        for (name, lines), policy in zip(runs, self.document['policy-groups']):
+            self.assertEqual({'DIRECT':'直连','REJECT':'拦截'}.get(name,name), policy['name'])
+            actual = []
+            for ref in policy['rule-sets']:
+                provider = self.document['rule-providers'][ref]
+                if provider['type'] == 'inline':
+                    actual.extend(provider['payload'])
+                else:
+                    original = next(line for line in lines if line.startswith('RULE-SET,'+ref+','))
+                    fields = original.split(',')
+                    actual.append(','.join(fields[:2]+fields[3:]))
+                    if provider['behavior'] != 'domain':
+                        self.assertEqual(','.join(fields[3:]), policy.get('options',''))
+            expected = [','.join(line.split(',')[:2]+line.split(',')[3:]) for line in lines]
+            self.assertCountEqual(expected, actual)
+
+    def test_named_policies_contain_multiple_rule_sets(self):
+        policies = {x['name']: x for x in self.document['policy-groups']}
+        self.assertEqual(['telegram_domain','telegram_ip'], policies['✈️ Telegram']['rule-sets'])
+        self.assertEqual(['ai_domain','🤖 AI · 本地'], policies['🤖 AI']['rule-sets'])
+        self.assertEqual(20, len(self.document['rule-providers']['💰 Crypto · 本地']['payload']))
+        self.assertEqual(27, len(self.document['policy-groups'])+1)
+        self.assertNotIn('rules', self.document)
+        self.assertNotEqual(policies['📦 Steam 下载CDN']['name'], policies['🛒 Steam 商店支付']['name'])
+
+    def test_disjoint_policy_runs_keep_priority_and_mixed_resolution_is_rejected(self):
+        source = ['DOMAIN,a.test,A','DOMAIN,b.test,B','DOMAIN,c.test,A','MATCH,DIRECT']
+        resolved = [line.replace(',A',',DIRECT').replace(',B',',DIRECT') for line in source]
+        grouped = self.build.latch_policy_groups(source, resolved, {})
+        self.assertEqual(['A','B','A (2)'], [p['name'] for p in grouped])
+        mixed = ['RULE-SET,a,A,no-resolve','RULE-SET,b,A','MATCH,DIRECT']
+        with self.assertRaisesRegex(ValueError,'Mixed IP resolution'):
+            self.build.latch_policy_groups(mixed, mixed, {'a':{'behavior':'ipcidr'},'b':{'behavior':'ipcidr'}})
 
     def test_policy_override_and_invalid_choices(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -74,7 +111,7 @@ class LatchConfigTests(unittest.TestCase):
             settings["policyTargets"]["✈️ Telegram"] = "🇯🇵 日本自动"
             profile.write_text(json.dumps(settings))
             result = self.build.latch_document(root)
-            self.assertIn("RULE-SET,telegram_domain,🇯🇵 日本自动", result["rules"])
+            self.assertEqual('🇯🇵 日本自动', next(p['target'] for p in result['policy-groups'] if p['name']=='✈️ Telegram'))
             settings["policyTargets"]["✈️ Telegram"] = "invented-policy"
             profile.write_text(json.dumps(settings))
             with self.assertRaisesRegex(ValueError, "Invalid policy choice"):

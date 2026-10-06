@@ -78,6 +78,68 @@ def build_quanx(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
     return out_path
 
 
+def latch_policy_groups(source_rules: list[str], resolved_rules: list[str], providers: dict) -> list[dict]:
+    """Keep adjacent source policies and their first-match priority intact."""
+    result = []
+    names = set()
+    local_payload = []
+    remote_options = set()
+
+    def finish():
+        if not result:
+            return
+        policy = result[-1]
+        if len(remote_options) > 1:
+            raise ValueError(f"Mixed IP resolution semantics in policy: {policy['name']}")
+        if remote_options == {"no-resolve"}:
+            if any(line.split(',')[0] in {'IP-CIDR', 'IP-CIDR6', 'GEOIP'} and not line.endswith(',no-resolve') for line in local_payload):
+                raise ValueError(f"Mixed IP resolution semantics in policy: {policy['name']}")
+            policy['options'] = 'no-resolve'
+        if local_payload:
+            base = policy['name'] + ' · 本地'
+            name = base
+            suffix = 2
+            while name in providers:
+                name = f'{base} ({suffix})'
+                suffix += 1
+            providers[name] = {'type': 'inline', 'behavior': 'classical', 'payload': list(local_payload), 'interval': 0}
+            policy['rule-sets'].append(name)
+
+    previous = None
+    for original, resolved in zip(source_rules, resolved_rules):
+        source_fields = [part.strip() for part in original.split(',')]
+        fields = resolved.split(',')
+        if fields[0] == 'MATCH':
+            finish()
+            break
+        source_target = source_fields[2]
+        if source_target != previous:
+            finish()
+            local_payload = []
+            remote_options = set()
+            base = {'DIRECT': '直连', 'REJECT': '拦截'}.get(source_target, source_target)
+            name = base
+            suffix = 2
+            while name in names:
+                name = f'{base} ({suffix})'
+                suffix += 1
+            names.add(name)
+            result.append({'name': name, 'target': fields[2], 'rule-sets': []})
+            previous = source_target
+        options = ','.join(fields[3:])
+        if options not in {'', 'no-resolve'}:
+            raise ValueError(f"Unsupported policy rule options: {resolved}")
+        if fields[0] == 'RULE-SET':
+            ref = fields[1]
+            if ref not in result[-1]['rule-sets']:
+                result[-1]['rule-sets'].append(ref)
+            if providers[ref]['behavior'] != 'domain':
+                remote_options.add(options)
+        else:
+            local_payload.append(','.join(fields[:2] + fields[3:]))
+    return result
+
+
 def latch_document(root: Path = ROOT) -> dict:
     """Adapt routing to Latch's node-only groups without importing credentials."""
     source = yaml.safe_load(read_parts(root / "src" / "clash", CLASH_PARTS, "\n"))
@@ -174,7 +236,9 @@ def latch_document(root: Path = ROOT) -> dict:
         if cursor in seen:
             raise ValueError(f"Chain cycle at {cursor}")
         references.append({"name": name, "dialer-proxy": via})
-    return {"proxies": references, "proxy-groups": list(native.values()), "rule-providers": providers, "rules": rules}
+    policy_groups = latch_policy_groups(source['rules'], rules, providers)
+    return {"proxies": references, "proxy-groups": list(native.values()), "rule-providers": providers,
+            "policy-groups": policy_groups, "fallback": rules[-1].split(',')[1]}
 
 
 def build_latch(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
@@ -182,7 +246,7 @@ def build_latch(version: str = DEFAULT_VERSION, root: Path = ROOT) -> Path:
     output = (
         "# Latch routing import; not a standalone latch-kernel startup config.\n"
         "# Import real nodes first; land-jp must use Trojan or AnyTLS.\n"
-        "# Requires RULE-SET no-resolve and large-provider support; see docs/latch.md.\n"
+        "# Requires grouped policy import support; see docs/latch.md.\n"
         + yaml.safe_dump(document, allow_unicode=True, sort_keys=False)
     )
     out_path = root / "dist" / "latch" / f"latch-naixi-{version}.yaml"

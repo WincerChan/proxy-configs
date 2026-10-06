@@ -1,6 +1,23 @@
 # Latch 分流配置
 
-新增第三个构建目标 `dist/latch/latch-naixi-stable.yaml`，使用 Latch 现有的「导入分流配置」入口。这是分流导入文件，不是直接交给 `latch-kernel` 的完整 JSON 启动配置。节点仍由客户端的订阅或手动添加维护。
+第三个构建目标 `dist/latch/latch-naixi-stable.yaml` 使用 Latch 的「导入策略组」入口。这是策略导入文件，不是直接交给 `latch-kernel` 的完整 JSON 启动配置。节点仍由客户端的订阅或手动添加维护。
+
+## 策略组与规则集结构
+
+生成器输出有序 `policy-groups`，每个策略组通过 `rule-sets` 引用多个规则集；`fallback` 单列兜底出口。当前产物为 26 个具名策略组加兜底、27 个远程规则集和 10 个本地规则集。Telegram 下引用域名 / IP 名单，AI 下引用远程名单 / 本地补充条件；Crypto 的 20 条条件放在一个本地规则集里。
+
+```yaml
+policy-groups:
+- name: ✈️ Telegram
+  target: 🇸🇬 新加坡自动
+  rule-sets: [telegram_domain, telegram_ip]
+  options: no-resolve
+fallback: 🧭 节点选择
+```
+
+以源文件中的逻辑策略名称分组，保持连续区段和优先级；即使 Steam 下载与商店当前都走直连，也保留两个可独立编辑的策略组。某个策略在不连续位置再次出现时拆成带编号的区段，不跨越其他策略合并。组内同出口的条件可归为一个本地 classical 集，条目选项保留；远程 IP / classical 名单的 no-resolve 提升到该策略，域名名单不受影响，无法无损表达的混合 IP 解析语义会使构建失败。
+
+需要包含 `policy-groups` 导入支持的新版 Latch。旧版会因缺少平铺 `rules` 拒绝这个文件，避免把导入误认为只有兜底。共享导入层保留策略名称和多规则集引用，运行配置在编译阶段展开。普通 Clash / QX 产物保持原格式。
 
 ## 格式选择
 
@@ -10,18 +27,18 @@
 
 ## 策略如何映射
 
-Latch 的节点组是「节点名称匹配 + 手动成员」，不能嵌套另一节点组或 DIRECT。构建时保留原有按地区等条件匹配节点的组，将 `exclude-filter` 合并进匹配表达式；终端策略组则递归展开所选策略，流量规则直接指向对应节点组或 DIRECT / REJECT。
+Latch 的节点组是「节点名称匹配 + 手动成员」，不能嵌套另一节点组或 DIRECT。构建时保留原有按地区等条件匹配节点的组，将 `exclude-filter` 合并进匹配表达式；源模板的出口选择递归解析到对应节点组或 DIRECT / REJECT，具名策略组保留规则集引用并使用该出口。
 
-`src/latch/profile.json` 的 `policyTargets` 可指定某个策略组使用它原列表中的哪个候选；未指定时使用源模板的第一项。因此新配置保持源模板的默认去向，但不复制 Mihomo 的终端策略组选择界面。以后在 Latch 内可直接编辑流量规则出口，或修改 `policyTargets` 后重新构建。
+`src/latch/profile.json` 的 `policyTargets` 可指定某个策略组使用它原列表中的哪个候选；未指定时使用源模板的第一项。因此新配置保持源模板的默认去向。以后在 Latch 内可直接编辑策略组出口，或修改 `policyTargets` 后重新构建。
 
 例如将 Telegram 默认出口改成日本自动：`"policyTargets": {"✈️ Telegram": "🇯🇵 日本自动"}`。不支持的候选和递归策略循环会让构建失败。源模板的组测速 tolerance、timeout、lazy 等不导入；Latch 使用自身的节点组测速设置。规则集的 `proxy: 🚀 代理` 不导入，因为 Latch 规则集没有逐项下载代理字段；现有内核规则集下载使用直连，不能宣称与 Mihomo 的下载出口相同。
 
-`🤖 AI` 保留为只匹配 `land-jp` 的节点组。导入文件只携带 `land-jp → ♾️ 中转` 的链式关系，不携带密码。客户端应先导入真实节点；缺少落地或中转节点时应拦截，不能回退到直连。中转匹配表达式排除 `land-`、Premium 与流量信息节点。
+`🤖 AI` 保留为只匹配 `land-jp` 的节点组。导入文件只携带 `land-jp → ♾️ 中转` 的链式关系，不携带密码；「导入策略组」入口忽略这个关系，需要在客户端单独设置。客户端应先导入真实节点并设置经由；缺少落地或中转节点时应拦截。中转匹配表达式排除 `land-`、Premium 与流量信息节点。
 
 ## 验证要求
 
 - 构建保持现有 Clash / QX 产物不变，CI 校验及发布第三个文件。
-- 检查全部规则的目标、引用和唯一末尾 MATCH，策略选择无循环。
+- 检查具名策略组的目标、多个规则集引用和 fallback；编译后只保留唯一末尾 MATCH，策略选择无循环。
 - 使用 Latch 共享导入、编译接口核验地区匹配、排除条件、缺失引用和链式路径。
 - 保留 RULE-SET 上的 `no-resolve`，内核将它作用于名单中的 IP / GEOIP 条目。
 - 验证超过旧条目上限的中国域名名单及全部远程规则集可加载。
@@ -29,8 +46,8 @@ Latch 的节点组是「节点名称匹配 + 手动成员」，不能嵌套另�
 
 ## 使用
 
-先在 Latch 的节点页导入机场节点，并添加名为 `land-jp` 的真实落地节点；当前 Latch 内核支持 Trojan / AnyTLS。随后在分流页「更多 → 导入分流配置」选择生成的 YAML，再切换到导入的分流配置。客户端已有同名节点组会按现有契约保留，导入前请确认它们的名称匹配条件正确，或使用新的空白测试数据目录。
+先在 Latch 的节点页导入机场节点，并添加名为 `land-jp` 的真实落地节点；当前 Latch 内核支持 Trojan / AnyTLS。随后在策略组页「导入策略组」选择生成的 YAML，选择合并或替换。客户端已有同名节点组会按现有契约保留；此入口不导入节点或改变链式规则，经由关系仍在客户端单独管理。
 
 运行 `python3 scripts/validate-latch.py --online` 可检查当前上游名单。若有 Latch 工程构建的 CLI，可追加 `--business /path/to/latch-business --kernel /path/to/latch-kernel`，验证真实导入、匹配、链式方向、缺失落地拦截及全部真实名单的内核加载。此验证只使用受控的虚构节点，不修改客户端数据或连接用户代理。
 
-Windows 可用 `--business-dll C:\path\core\latch-core.dll` 代替 CLI，调用纯业务 ABI，不创建客户端。2026-10-05 已验证随包 build86 DLL 与新 Windows 内核，以及 Linux business CLI / 新内核：16 个节点组、27 个真实名单和 152 条规则均通过；中国域名 111,224 条。29 个生成器回归通过，旧两套 dist 文件内容不变。用户实机与真实中转验收仍待补。
+Windows 可用 `--business-dll C:\path\core\latch-core.dll` 代替 CLI，调用纯业务 ABI，不创建客户端。2026-10-06 已验证 Linux 业务层与 Windows build274 DLL：预览为 27 个策略组、37 个规则集，合并 / 替换保留名称、引用和顺序，保存后重新打开结构不变，已有节点与链式关系保留。实际 Windows 内核加载 27 个已缓存的远程名单和 10 个本地名单通过。31 个生成器回归、Go 业务层 / 客户端 race 测试通过；旧两套 dist 文件内容不变。用户实机与真实中转验收仍待补。

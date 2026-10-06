@@ -1,6 +1,6 @@
 # Latch routing import; not a standalone latch-kernel startup config.
 # Import real nodes first; land-jp must use Trojan or AnyTLS.
-# Requires RULE-SET no-resolve and large-provider support; see docs/latch.md.
+# Requires grouped policy import support; see docs/latch.md.
 proxies:
 - name: land-jp
   dialer-proxy: ♾️ 中转
@@ -268,156 +268,301 @@ rule-providers:
     interval: 86400
     path: rules/facebook_domain.yaml
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.yaml
-rules:
-- RULE-SET,reject_domain,REJECT
-- RULE-SET,private_domain,DIRECT
-- RULE-SET,private_ip,DIRECT,no-resolve
-- DOMAIN,hound-jp.itswincer.net,🇯🇵 日本自动
-- DOMAIN,hound-robin-jp.itswincer.net,🇯🇵 日本自动
-- DOMAIN,arc-jp.hound.itswincer.net,🇯🇵 日本自动
-- RULE-SET,ai_domain,🤖 AI
-- DOMAIN-SUFFIX,chatgpt.com,🤖 AI
-- DOMAIN-SUFFIX,openai.com,🤖 AI
-- DOMAIN-SUFFIX,oaistatic.com,🤖 AI
-- DOMAIN-SUFFIX,oaiusercontent.com,🤖 AI
-- DOMAIN-SUFFIX,anthropic.com,🤖 AI
-- DOMAIN-SUFFIX,claude.ai,🤖 AI
-- DOMAIN-SUFFIX,clau.de,🤖 AI
-- DOMAIN-SUFFIX,claude.com,🤖 AI
-- DOMAIN-SUFFIX,claudeusercontent.com,🤖 AI
-- DOMAIN-SUFFIX,claudemcpclient.com,🤖 AI
-- DOMAIN-SUFFIX,claudemcpcontent.com,🤖 AI
-- DOMAIN-SUFFIX,perplexity.ai,🤖 AI
-- DOMAIN-SUFFIX,poe.com,🤖 AI
-- DOMAIN-SUFFIX,gemini.google.com,🤖 AI
-- DOMAIN-SUFFIX,ai.google.dev,🤖 AI
-- DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI
-- DOMAIN-SUFFIX,binance.com,🧭 节点选择
-- DOMAIN-SUFFIX,binance.us,🧭 节点选择
-- DOMAIN-SUFFIX,bnbstatic.com,🧭 节点选择
-- DOMAIN-SUFFIX,okx.com,🧭 节点选择
-- DOMAIN-SUFFIX,bybit.com,🧭 节点选择
-- DOMAIN-SUFFIX,bitget.com,🧭 节点选择
-- DOMAIN-SUFFIX,gate.io,🧭 节点选择
-- DOMAIN-SUFFIX,kucoin.com,🧭 节点选择
-- DOMAIN-SUFFIX,coinbase.com,🧭 节点选择
-- DOMAIN-SUFFIX,kraken.com,🧭 节点选择
-- DOMAIN-SUFFIX,bitfinex.com,🧭 节点选择
-- DOMAIN-SUFFIX,mexc.com,🧭 节点选择
-- DOMAIN-SUFFIX,bithumb.com,🧭 节点选择
-- DOMAIN-SUFFIX,upbit.com,🧭 节点选择
-- DOMAIN-SUFFIX,coingecko.com,🧭 节点选择
-- DOMAIN-SUFFIX,coinmarketcap.com,🧭 节点选择
-- DOMAIN-SUFFIX,tradingview.com,🧭 节点选择
-- DOMAIN-KEYWORD,binance,🧭 节点选择
-- DOMAIN-KEYWORD,bybit,🧭 节点选择
-- DOMAIN-KEYWORD,okx,🧭 节点选择
-- RULE-SET,telegram_domain,🇸🇬 新加坡自动
-- RULE-SET,telegram_ip,🇸🇬 新加坡自动,no-resolve
-- RULE-SET,netflix_domain,🇯🇵 日本自动
-- RULE-SET,netflix_ip,🇯🇵 日本自动,no-resolve
-- RULE-SET,disney_domain,🇯🇵 日本自动
-- DOMAIN-SUFFIX,disneyplus.com,🇯🇵 日本自动
-- DOMAIN-SUFFIX,disney-plus.net,🇯🇵 日本自动
-- DOMAIN-SUFFIX,dssott.com,🇯🇵 日本自动
-- DOMAIN-SUFFIX,bamgrid.com,🇯🇵 日本自动
-- RULE-SET,youtube_domain,♻️ 自动低延迟
-- RULE-SET,bilibili_domain,DIRECT
-- RULE-SET,biliintl_domain,DIRECT
-- RULE-SET,spotify_domain,🧭 节点选择
-- RULE-SET,google_domain,♻️ 自动低延迟
-- RULE-SET,google_ip,♻️ 自动低延迟,no-resolve
-- RULE-SET,github_domain,🧭 节点选择
-- RULE-SET,microsoft_domain,DIRECT
-- RULE-SET,onedrive_domain,DIRECT
-- DOMAIN-SUFFIX,push.apple.com,🧭 节点选择
-- DOMAIN-SUFFIX,push-apple.com.akadns.net,🧭 节点选择
-- DOMAIN-KEYWORD,push.apple,🧭 节点选择
-- DOMAIN,courier.push.apple.com,🧭 节点选择
-- DOMAIN,api.push.apple.com,🧭 节点选择
-- DOMAIN,api2.push.apple.com,🧭 节点选择
-- DOMAIN,api3.push.apple.com,🧭 节点选择
-- RULE-SET,apple,DIRECT,no-resolve
-- RULE-SET,twitter_domain,🧭 节点选择
-- RULE-SET,twitter_ip,🧭 节点选择,no-resolve
-- RULE-SET,tiktok_domain,🇯🇵 日本自动
-- RULE-SET,facebook_domain,🧭 节点选择
-- DOMAIN-SUFFIX,facebook.com,🧭 节点选择
-- DOMAIN-SUFFIX,fbcdn.net,🧭 节点选择
-- DOMAIN-SUFFIX,instagram.com,🧭 节点选择
-- DOMAIN-SUFFIX,cdninstagram.com,🧭 节点选择
-- DOMAIN-SUFFIX,whatsapp.com,🧭 节点选择
-- DOMAIN-SUFFIX,discord.com,🧭 节点选择
-- DOMAIN-SUFFIX,discordapp.com,🧭 节点选择
-- DOMAIN-SUFFIX,reddit.com,🧭 节点选择
-- DOMAIN-SUFFIX,redd.it,🧭 节点选择
-- DOMAIN,edge.steam-dns.top.comcast.net,DIRECT
-- DOMAIN,alibaba.cdn.steampipe.steamcontent.com,DIRECT
-- DOMAIN-SUFFIX,steamcontent.com,DIRECT
-- DOMAIN-SUFFIX,steamserver.net,DIRECT
-- DOMAIN-SUFFIX,steamcdn-a.akamaihd.net,DIRECT
-- DOMAIN-SUFFIX,steampipe.akamaized.net,DIRECT
-- DOMAIN-SUFFIX,steampipe-kr.akamaized.net,DIRECT
-- DOMAIN-SUFFIX,steampipe-partner.akamaized.net,DIRECT
-- DOMAIN-SUFFIX,steam.apac.qtlglb.com,DIRECT
-- DOMAIN-SUFFIX,steam.eca.qtlglb.com,DIRECT
-- DOMAIN-SUFFIX,steam.naeu.qtlglb.com,DIRECT
-- DOMAIN-SUFFIX,steam.ru.qtlglb.com,DIRECT
-- DOMAIN-SUFFIX,steam.cdn.on.net,DIRECT
-- DOMAIN-SUFFIX,steam.cdn.webra.ru,DIRECT
-- DOMAIN-SUFFIX,steam.cdn.orcon.net.nz,DIRECT
-- DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz,DIRECT
-- DOMAIN-SUFFIX,cdn-ali.content.steamchina.com,DIRECT
-- DOMAIN-SUFFIX,cdn-qc.content.steamchina.com,DIRECT
-- DOMAIN-SUFFIX,cdn-ws.content.steamchina.com,DIRECT
-- DOMAIN-SUFFIX,dl.steam.clngaa.com,DIRECT
-- DOMAIN-SUFFIX,dl.steam.ksyna.com,DIRECT
-- DOMAIN-SUFFIX,st.dl.bscstorage.net,DIRECT
-- DOMAIN-SUFFIX,st.dl.eccdnx.com,DIRECT
-- DOMAIN-SUFFIX,st.dl.pinyuncloud.com,DIRECT
-- DOMAIN-SUFFIX,client-update.queniuqe.com,DIRECT
-- DOMAIN-SUFFIX,steamcontent.tnkjmec.com,DIRECT
-- DOMAIN-SUFFIX,steampowered.com.8686c.com,DIRECT
-- DOMAIN-SUFFIX,steamstatic.com.8686c.com,DIRECT
-- DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net,DIRECT
-- DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net,DIRECT
-- DOMAIN-SUFFIX,store.steampowered.com,DIRECT
-- DOMAIN-SUFFIX,checkout.steampowered.com,DIRECT
-- DOMAIN-SUFFIX,help.steampowered.com,DIRECT
-- DOMAIN-SUFFIX,steamstore-a.akamaihd.net,DIRECT
-- DOMAIN-SUFFIX,steamstatic.com,DIRECT
-- DOMAIN-SUFFIX,steampowered.com,DIRECT
-- DOMAIN-SUFFIX,steamcommunity.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net,🧭 节点选择
-- DOMAIN-SUFFIX,steam-chat.com,🧭 节点选择
-- DOMAIN-SUFFIX,steam-api.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamusercontent.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net,🧭 节点选择
-- DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net,🧭 节点选择
-- DOMAIN-SUFFIX,steamvideo-a.akamaihd.net,🧭 节点选择
-- DOMAIN-SUFFIX,steambroadcast.akamaized.net,🧭 节点选择
-- DOMAIN-SUFFIX,steammobile.akamaized.net,🧭 节点选择
-- DOMAIN-SUFFIX,steam.tv,🧭 节点选择
-- DOMAIN-SUFFIX,s.team,🧭 节点选择
-- DOMAIN-SUFFIX,steamconnecttest.com,🧭 节点选择
-- DOMAIN-SUFFIX,valve.net,🧭 节点选择
-- DOMAIN-SUFFIX,valvesoftware.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamgames.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamdeck.com,🧭 节点选择
-- DOMAIN-SUFFIX,steamchina.com,🧭 节点选择
-- DOMAIN-SUFFIX,wmsjsteam.com,🧭 节点选择
-- DOMAIN-SUFFIX,csgo.com.cn,🧭 节点选择
-- DOMAIN-SUFFIX,csgo.wmsj.cn,🧭 节点选择
-- DOMAIN-SUFFIX,dota2.com.cn,🧭 节点选择
-- DOMAIN-SUFFIX,dota2.wmsj.cn,🧭 节点选择
-- RULE-SET,games_domain,🧭 节点选择
-- DOMAIN-SUFFIX,epicgames.com,🧭 节点选择
-- DOMAIN-SUFFIX,unrealengine.com,🧭 节点选择
-- DOMAIN-SUFFIX,battle.net,🧭 节点选择
-- DOMAIN-SUFFIX,blizzard.com,🧭 节点选择
-- DOMAIN-SUFFIX,ea.com,🧭 节点选择
-- DOMAIN-SUFFIX,ubisoft.com,🧭 节点选择
-- RULE-SET,cn_domain,DIRECT
-- RULE-SET,cn_ip,DIRECT,no-resolve
-- RULE-SET,geolocation_not_cn,🧭 节点选择
-- MATCH,🧭 节点选择
+  🐕 Hound · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN,hound-jp.itswincer.net
+    - DOMAIN,hound-robin-jp.itswincer.net
+    - DOMAIN,arc-jp.hound.itswincer.net
+    interval: 0
+  🤖 AI · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,chatgpt.com
+    - DOMAIN-SUFFIX,openai.com
+    - DOMAIN-SUFFIX,oaistatic.com
+    - DOMAIN-SUFFIX,oaiusercontent.com
+    - DOMAIN-SUFFIX,anthropic.com
+    - DOMAIN-SUFFIX,claude.ai
+    - DOMAIN-SUFFIX,clau.de
+    - DOMAIN-SUFFIX,claude.com
+    - DOMAIN-SUFFIX,claudeusercontent.com
+    - DOMAIN-SUFFIX,claudemcpclient.com
+    - DOMAIN-SUFFIX,claudemcpcontent.com
+    - DOMAIN-SUFFIX,perplexity.ai
+    - DOMAIN-SUFFIX,poe.com
+    - DOMAIN-SUFFIX,gemini.google.com
+    - DOMAIN-SUFFIX,ai.google.dev
+    - DOMAIN-SUFFIX,copilot.microsoft.com
+    interval: 0
+  💰 Crypto · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,binance.com
+    - DOMAIN-SUFFIX,binance.us
+    - DOMAIN-SUFFIX,bnbstatic.com
+    - DOMAIN-SUFFIX,okx.com
+    - DOMAIN-SUFFIX,bybit.com
+    - DOMAIN-SUFFIX,bitget.com
+    - DOMAIN-SUFFIX,gate.io
+    - DOMAIN-SUFFIX,kucoin.com
+    - DOMAIN-SUFFIX,coinbase.com
+    - DOMAIN-SUFFIX,kraken.com
+    - DOMAIN-SUFFIX,bitfinex.com
+    - DOMAIN-SUFFIX,mexc.com
+    - DOMAIN-SUFFIX,bithumb.com
+    - DOMAIN-SUFFIX,upbit.com
+    - DOMAIN-SUFFIX,coingecko.com
+    - DOMAIN-SUFFIX,coinmarketcap.com
+    - DOMAIN-SUFFIX,tradingview.com
+    - DOMAIN-KEYWORD,binance
+    - DOMAIN-KEYWORD,bybit
+    - DOMAIN-KEYWORD,okx
+    interval: 0
+  📺 DisneyPlus · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,disneyplus.com
+    - DOMAIN-SUFFIX,disney-plus.net
+    - DOMAIN-SUFFIX,dssott.com
+    - DOMAIN-SUFFIX,bamgrid.com
+    interval: 0
+  🍎 Apple推送 · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,push.apple.com
+    - DOMAIN-SUFFIX,push-apple.com.akadns.net
+    - DOMAIN-KEYWORD,push.apple
+    - DOMAIN,courier.push.apple.com
+    - DOMAIN,api.push.apple.com
+    - DOMAIN,api2.push.apple.com
+    - DOMAIN,api3.push.apple.com
+    interval: 0
+  📘 Social · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,facebook.com
+    - DOMAIN-SUFFIX,fbcdn.net
+    - DOMAIN-SUFFIX,instagram.com
+    - DOMAIN-SUFFIX,cdninstagram.com
+    - DOMAIN-SUFFIX,whatsapp.com
+    - DOMAIN-SUFFIX,discord.com
+    - DOMAIN-SUFFIX,discordapp.com
+    - DOMAIN-SUFFIX,reddit.com
+    - DOMAIN-SUFFIX,redd.it
+    interval: 0
+  📦 Steam 下载CDN · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN,edge.steam-dns.top.comcast.net
+    - DOMAIN,alibaba.cdn.steampipe.steamcontent.com
+    - DOMAIN-SUFFIX,steamcontent.com
+    - DOMAIN-SUFFIX,steamserver.net
+    - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net
+    - DOMAIN-SUFFIX,steampipe.akamaized.net
+    - DOMAIN-SUFFIX,steampipe-kr.akamaized.net
+    - DOMAIN-SUFFIX,steampipe-partner.akamaized.net
+    - DOMAIN-SUFFIX,steam.apac.qtlglb.com
+    - DOMAIN-SUFFIX,steam.eca.qtlglb.com
+    - DOMAIN-SUFFIX,steam.naeu.qtlglb.com
+    - DOMAIN-SUFFIX,steam.ru.qtlglb.com
+    - DOMAIN-SUFFIX,steam.cdn.on.net
+    - DOMAIN-SUFFIX,steam.cdn.webra.ru
+    - DOMAIN-SUFFIX,steam.cdn.orcon.net.nz
+    - DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz
+    - DOMAIN-SUFFIX,cdn-ali.content.steamchina.com
+    - DOMAIN-SUFFIX,cdn-qc.content.steamchina.com
+    - DOMAIN-SUFFIX,cdn-ws.content.steamchina.com
+    - DOMAIN-SUFFIX,dl.steam.clngaa.com
+    - DOMAIN-SUFFIX,dl.steam.ksyna.com
+    - DOMAIN-SUFFIX,st.dl.bscstorage.net
+    - DOMAIN-SUFFIX,st.dl.eccdnx.com
+    - DOMAIN-SUFFIX,st.dl.pinyuncloud.com
+    - DOMAIN-SUFFIX,client-update.queniuqe.com
+    - DOMAIN-SUFFIX,steamcontent.tnkjmec.com
+    - DOMAIN-SUFFIX,steampowered.com.8686c.com
+    - DOMAIN-SUFFIX,steamstatic.com.8686c.com
+    - DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net
+    - DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net
+    interval: 0
+  🛒 Steam 商店支付 · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,store.steampowered.com
+    - DOMAIN-SUFFIX,checkout.steampowered.com
+    - DOMAIN-SUFFIX,help.steampowered.com
+    - DOMAIN-SUFFIX,steamstore-a.akamaihd.net
+    - DOMAIN-SUFFIX,steamstatic.com
+    - DOMAIN-SUFFIX,steampowered.com
+    interval: 0
+  🎮 Steam 登录社区 · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,steamcommunity.com
+    - DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net
+    - DOMAIN-SUFFIX,steam-chat.com
+    - DOMAIN-SUFFIX,steam-api.com
+    - DOMAIN-SUFFIX,steamusercontent.com
+    - DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net
+    - DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net
+    - DOMAIN-SUFFIX,steamvideo-a.akamaihd.net
+    - DOMAIN-SUFFIX,steambroadcast.akamaized.net
+    - DOMAIN-SUFFIX,steammobile.akamaized.net
+    - DOMAIN-SUFFIX,steam.tv
+    - DOMAIN-SUFFIX,s.team
+    - DOMAIN-SUFFIX,steamconnecttest.com
+    - DOMAIN-SUFFIX,valve.net
+    - DOMAIN-SUFFIX,valvesoftware.com
+    - DOMAIN-SUFFIX,steamgames.com
+    - DOMAIN-SUFFIX,steamdeck.com
+    - DOMAIN-SUFFIX,steamchina.com
+    - DOMAIN-SUFFIX,wmsjsteam.com
+    - DOMAIN-SUFFIX,csgo.com.cn
+    - DOMAIN-SUFFIX,csgo.wmsj.cn
+    - DOMAIN-SUFFIX,dota2.com.cn
+    - DOMAIN-SUFFIX,dota2.wmsj.cn
+    interval: 0
+  🎮 Games · 本地:
+    type: inline
+    behavior: classical
+    payload:
+    - DOMAIN-SUFFIX,epicgames.com
+    - DOMAIN-SUFFIX,unrealengine.com
+    - DOMAIN-SUFFIX,battle.net
+    - DOMAIN-SUFFIX,blizzard.com
+    - DOMAIN-SUFFIX,ea.com
+    - DOMAIN-SUFFIX,ubisoft.com
+    interval: 0
+policy-groups:
+- name: 拦截
+  target: REJECT
+  rule-sets:
+  - reject_domain
+- name: 直连
+  target: DIRECT
+  rule-sets:
+  - private_domain
+  - private_ip
+  options: no-resolve
+- name: 🐕 Hound
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - 🐕 Hound · 本地
+- name: 🤖 AI
+  target: 🤖 AI
+  rule-sets:
+  - ai_domain
+  - 🤖 AI · 本地
+- name: 💰 Crypto
+  target: 🧭 节点选择
+  rule-sets:
+  - 💰 Crypto · 本地
+- name: ✈️ Telegram
+  target: 🇸🇬 新加坡自动
+  rule-sets:
+  - telegram_domain
+  - telegram_ip
+  options: no-resolve
+- name: 🎬 Netflix
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - netflix_domain
+  - netflix_ip
+  options: no-resolve
+- name: 📺 DisneyPlus
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - disney_domain
+  - 📺 DisneyPlus · 本地
+- name: 📺 YouTube
+  target: ♻️ 自动低延迟
+  rule-sets:
+  - youtube_domain
+- name: 📺 Bilibili
+  target: DIRECT
+  rule-sets:
+  - bilibili_domain
+  - biliintl_domain
+- name: 🎵 Spotify
+  target: 🧭 节点选择
+  rule-sets:
+  - spotify_domain
+- name: 🔍 Google
+  target: ♻️ 自动低延迟
+  rule-sets:
+  - google_domain
+  - google_ip
+  options: no-resolve
+- name: 💻 GitHub
+  target: 🧭 节点选择
+  rule-sets:
+  - github_domain
+- name: Ⓜ️ Microsoft
+  target: DIRECT
+  rule-sets:
+  - microsoft_domain
+- name: ☁️ OneDrive
+  target: DIRECT
+  rule-sets:
+  - onedrive_domain
+- name: 🍎 Apple推送
+  target: 🧭 节点选择
+  rule-sets:
+  - 🍎 Apple推送 · 本地
+- name: 🍎 Apple
+  target: DIRECT
+  rule-sets:
+  - apple
+  options: no-resolve
+- name: 🐦 Twitter
+  target: 🧭 节点选择
+  rule-sets:
+  - twitter_domain
+  - twitter_ip
+  options: no-resolve
+- name: 📱 TikTok
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - tiktok_domain
+- name: 📘 Social
+  target: 🧭 节点选择
+  rule-sets:
+  - facebook_domain
+  - 📘 Social · 本地
+- name: 📦 Steam 下载CDN
+  target: DIRECT
+  rule-sets:
+  - 📦 Steam 下载CDN · 本地
+- name: 🛒 Steam 商店支付
+  target: DIRECT
+  rule-sets:
+  - 🛒 Steam 商店支付 · 本地
+- name: 🎮 Steam 登录社区
+  target: 🧭 节点选择
+  rule-sets:
+  - 🎮 Steam 登录社区 · 本地
+- name: 🎮 Games
+  target: 🧭 节点选择
+  rule-sets:
+  - games_domain
+  - 🎮 Games · 本地
+- name: 🇨🇳 直连
+  target: DIRECT
+  rule-sets:
+  - cn_domain
+  - cn_ip
+  options: no-resolve
+- name: 🌍 Global
+  target: 🧭 节点选择
+  rule-sets:
+  - geolocation_not_cn
+fallback: 🧭 节点选择
