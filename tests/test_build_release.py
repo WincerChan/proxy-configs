@@ -29,6 +29,12 @@ class BuildReleaseTests(unittest.TestCase):
         expected_quanx = quanx_path.read_text(encoding="utf-8")
         expected_latch = latch_path.read_text(encoding="utf-8")
 
+        for path, content in [(clash_path, expected_clash),
+                              (quanx_path, expected_quanx),
+                              (latch_path, expected_latch)]:
+            with self.subTest(path=path):
+                self.assertNotIn("📊 流量看板", content)
+
         built_paths = build_release.build_all(version="stable", root=ROOT)
 
         self.assertEqual([clash_path, quanx_path, latch_path], built_paths)

@@ -13,10 +13,6 @@ proxy-groups:
   type: select
   filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
     left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:.*)).*$
-- name: 📊 流量看板
-  type: select
-  filter: (剩余|流量|套餐|官网|到期|expire|traffic|reset|days left|expire date|^[0-9.]+[ ]*[KMGT]?B?[
-    ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)
 - name: ♻️ 自动低延迟
   type: url-test
   filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
