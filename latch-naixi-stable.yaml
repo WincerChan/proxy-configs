@@ -1,0 +1,507 @@
+# Latch routing import; not a standalone latch-kernel startup config.
+# Import real nodes first; land-jp must use Trojan or AnyTLS.
+# Requires policy-groups and conditions import support; see docs/latch.md.
+proxies:
+- name: land-jp
+  dialer-proxy: 🇯🇵 日本自动
+proxy-groups:
+- name: 🧭 节点选择
+  type: select
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:.*)).*$
+- name: ♻️ 自动低延迟
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(hong[
+    ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
+    ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney))).*$
+- name: 🛟 故障切换
+  type: fallback
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(hong[
+    ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
+    ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney))).*$
+- name: 🇭🇰 香港自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(hong[
+    ]*kong|香港|港|HK))).*$
+- name: 🇹🇼 台湾自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(taiwan|台湾|台北|taipei|TW))).*$
+- name: 🇯🇵 日本自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(japan|日本|东京|大阪|tokyo|osaka|JP))).*$
+- name: 🇸🇬 新加坡自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(singapore|新加坡|狮城|SG))).*$
+- name: 🇺🇸 美国自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(usa|united[
+    ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])))).*$
+- name: 🇰🇷 韩国自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(korea|韩国|首尔|seoul|KR))).*$
+- name: 🇬🇧 英国自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(united[
+    ]*kingdom|britain|london|英国|伦敦|UK))).*$
+- name: 🇪🇺 欧洲自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(netherlands|germany|switzerland|france|united[
+    ]*kingdom|sweden|bulgaria|austria|ireland|turkey|hungary|russia|moscow|petersburg|荷兰|德国|瑞士|法国|英国|瑞典|保加利亚|奥地利|爱尔兰|土耳其|匈牙利|俄罗斯))).*$
+- name: 🇨🇦 加拿大自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(canada|加拿大|toronto|vancouver|CA))).*$
+- name: 🇦🇺 澳洲自动
+  type: url-test
+  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
+    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:(australia|sydney|澳大利亚|澳洲|悉尼|(?:^|[^A-Za-z])AU(?:$|[^A-Za-z])))).*$
+rule-providers:
+  reject_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/reject_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.yaml
+  private_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/private_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.yaml
+  private_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/private_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.yaml
+  cn_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/cn_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
+  cn_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/cn_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.yaml
+  geolocation_not_cn:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/geolocation_not_cn.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml
+  ai_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/ai_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.yaml
+  telegram_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/telegram_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.yaml
+  telegram_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/telegram_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.yaml
+  netflix_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/netflix_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.yaml
+  netflix_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/netflix_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.yaml
+  youtube_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/youtube_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.yaml
+  bilibili_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/bilibili_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.yaml
+  biliintl_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/biliintl_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.yaml
+  google_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/google_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.yaml
+  google_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/google_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.yaml
+  github_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/github_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.yaml
+  microsoft_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/microsoft_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.yaml
+  onedrive_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/onedrive_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.yaml
+  apple:
+    type: http
+    behavior: classical
+    format: yaml
+    interval: 86400
+    path: ./rules/apple.yaml
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple_Classical.yaml
+  games_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/games_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.yaml
+  twitter_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/twitter_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.yaml
+  twitter_ip:
+    type: http
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    path: rules/twitter_ip.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.yaml
+  tiktok_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/tiktok_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.yaml
+  disney_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/disney_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.yaml
+  spotify_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/spotify_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.yaml
+  facebook_domain:
+    type: http
+    behavior: domain
+    format: yaml
+    interval: 86400
+    path: rules/facebook_domain.yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.yaml
+policy-groups:
+- name: 拦截
+  target: REJECT
+  rule-sets:
+  - reject_domain
+- name: 直连
+  target: DIRECT
+  rule-sets:
+  - private_domain
+  - private_ip
+  options: no-resolve
+- name: 🐕 Hound
+  target: 🇯🇵 日本自动
+  rule-sets: []
+  conditions:
+  - DOMAIN,hound-jp.itswincer.net
+  - DOMAIN,hound-robin-jp.itswincer.net
+  - DOMAIN,arc-jp.hound.itswincer.net
+- name: 🤖 AI
+  target: land-jp
+  rule-sets:
+  - ai_domain
+  conditions:
+  - DOMAIN-SUFFIX,chatgpt.com
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+  - DOMAIN-SUFFIX,anthropic.com
+  - DOMAIN-SUFFIX,claude.ai
+  - DOMAIN-SUFFIX,clau.de
+  - DOMAIN-SUFFIX,claude.com
+  - DOMAIN-SUFFIX,claudeusercontent.com
+  - DOMAIN-SUFFIX,claudemcpclient.com
+  - DOMAIN-SUFFIX,claudemcpcontent.com
+  - DOMAIN-SUFFIX,perplexity.ai
+  - DOMAIN-SUFFIX,poe.com
+  - DOMAIN-SUFFIX,gemini.google.com
+  - DOMAIN-SUFFIX,ai.google.dev
+  - DOMAIN-SUFFIX,copilot.microsoft.com
+- name: 💰 Crypto
+  target: 🧭 节点选择
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,binance.com
+  - DOMAIN-SUFFIX,binance.us
+  - DOMAIN-SUFFIX,bnbstatic.com
+  - DOMAIN-SUFFIX,okx.com
+  - DOMAIN-SUFFIX,bybit.com
+  - DOMAIN-SUFFIX,bitget.com
+  - DOMAIN-SUFFIX,gate.io
+  - DOMAIN-SUFFIX,kucoin.com
+  - DOMAIN-SUFFIX,coinbase.com
+  - DOMAIN-SUFFIX,kraken.com
+  - DOMAIN-SUFFIX,bitfinex.com
+  - DOMAIN-SUFFIX,mexc.com
+  - DOMAIN-SUFFIX,bithumb.com
+  - DOMAIN-SUFFIX,upbit.com
+  - DOMAIN-SUFFIX,coingecko.com
+  - DOMAIN-SUFFIX,coinmarketcap.com
+  - DOMAIN-SUFFIX,tradingview.com
+  - DOMAIN-KEYWORD,binance
+  - DOMAIN-KEYWORD,bybit
+  - DOMAIN-KEYWORD,okx
+- name: ✈️ Telegram
+  target: 🇸🇬 新加坡自动
+  rule-sets:
+  - telegram_domain
+  - telegram_ip
+  options: no-resolve
+- name: 🎬 Netflix
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - netflix_domain
+  - netflix_ip
+  options: no-resolve
+- name: 📺 DisneyPlus
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - disney_domain
+  conditions:
+  - DOMAIN-SUFFIX,disneyplus.com
+  - DOMAIN-SUFFIX,disney-plus.net
+  - DOMAIN-SUFFIX,dssott.com
+  - DOMAIN-SUFFIX,bamgrid.com
+- name: 📺 YouTube
+  target: ♻️ 自动低延迟
+  rule-sets:
+  - youtube_domain
+- name: 📺 Bilibili
+  target: DIRECT
+  rule-sets:
+  - bilibili_domain
+  - biliintl_domain
+- name: 🎵 Spotify
+  target: 🧭 节点选择
+  rule-sets:
+  - spotify_domain
+- name: 🔍 Google
+  target: ♻️ 自动低延迟
+  rule-sets:
+  - google_domain
+  - google_ip
+  options: no-resolve
+- name: 💻 GitHub
+  target: 🧭 节点选择
+  rule-sets:
+  - github_domain
+- name: Ⓜ️ Microsoft
+  target: DIRECT
+  rule-sets:
+  - microsoft_domain
+- name: ☁️ OneDrive
+  target: DIRECT
+  rule-sets:
+  - onedrive_domain
+- name: 🍎 Apple推送
+  target: 🧭 节点选择
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,push.apple.com
+  - DOMAIN-SUFFIX,push-apple.com.akadns.net
+  - DOMAIN-KEYWORD,push.apple
+  - DOMAIN,courier.push.apple.com
+  - DOMAIN,api.push.apple.com
+  - DOMAIN,api2.push.apple.com
+  - DOMAIN,api3.push.apple.com
+- name: 🍎 Apple
+  target: DIRECT
+  rule-sets:
+  - apple
+  options: no-resolve
+- name: 🐦 Twitter
+  target: 🧭 节点选择
+  rule-sets:
+  - twitter_domain
+  - twitter_ip
+  options: no-resolve
+- name: 📱 TikTok
+  target: 🇯🇵 日本自动
+  rule-sets:
+  - tiktok_domain
+- name: 📘 Social
+  target: 🧭 节点选择
+  rule-sets:
+  - facebook_domain
+  conditions:
+  - DOMAIN-SUFFIX,facebook.com
+  - DOMAIN-SUFFIX,fbcdn.net
+  - DOMAIN-SUFFIX,instagram.com
+  - DOMAIN-SUFFIX,cdninstagram.com
+  - DOMAIN-SUFFIX,whatsapp.com
+  - DOMAIN-SUFFIX,discord.com
+  - DOMAIN-SUFFIX,discordapp.com
+  - DOMAIN-SUFFIX,reddit.com
+  - DOMAIN-SUFFIX,redd.it
+- name: 📦 Steam 下载CDN
+  target: DIRECT
+  rule-sets: []
+  conditions:
+  - DOMAIN,edge.steam-dns.top.comcast.net
+  - DOMAIN,alibaba.cdn.steampipe.steamcontent.com
+  - DOMAIN-SUFFIX,steamcontent.com
+  - DOMAIN-SUFFIX,steamserver.net
+  - DOMAIN-SUFFIX,steamcdn-a.akamaihd.net
+  - DOMAIN-SUFFIX,steampipe.akamaized.net
+  - DOMAIN-SUFFIX,steampipe-kr.akamaized.net
+  - DOMAIN-SUFFIX,steampipe-partner.akamaized.net
+  - DOMAIN-SUFFIX,steam.apac.qtlglb.com
+  - DOMAIN-SUFFIX,steam.eca.qtlglb.com
+  - DOMAIN-SUFFIX,steam.naeu.qtlglb.com
+  - DOMAIN-SUFFIX,steam.ru.qtlglb.com
+  - DOMAIN-SUFFIX,steam.cdn.on.net
+  - DOMAIN-SUFFIX,steam.cdn.webra.ru
+  - DOMAIN-SUFFIX,steam.cdn.orcon.net.nz
+  - DOMAIN-SUFFIX,steam.cdn.slingshot.co.nz
+  - DOMAIN-SUFFIX,cdn-ali.content.steamchina.com
+  - DOMAIN-SUFFIX,cdn-qc.content.steamchina.com
+  - DOMAIN-SUFFIX,cdn-ws.content.steamchina.com
+  - DOMAIN-SUFFIX,dl.steam.clngaa.com
+  - DOMAIN-SUFFIX,dl.steam.ksyna.com
+  - DOMAIN-SUFFIX,st.dl.bscstorage.net
+  - DOMAIN-SUFFIX,st.dl.eccdnx.com
+  - DOMAIN-SUFFIX,st.dl.pinyuncloud.com
+  - DOMAIN-SUFFIX,client-update.queniuqe.com
+  - DOMAIN-SUFFIX,steamcontent.tnkjmec.com
+  - DOMAIN-SUFFIX,steampowered.com.8686c.com
+  - DOMAIN-SUFFIX,steamstatic.com.8686c.com
+  - DOMAIN-SUFFIX,f3b7q2p3.ssl.hwcdn.net
+  - DOMAIN-SUFFIX,a4e8s8k3.map2.ssl.hwcdn.net
+- name: 🛒 Steam 商店支付
+  target: DIRECT
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,store.steampowered.com
+  - DOMAIN-SUFFIX,checkout.steampowered.com
+  - DOMAIN-SUFFIX,help.steampowered.com
+  - DOMAIN-SUFFIX,steamstore-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamstatic.com
+  - DOMAIN-SUFFIX,steampowered.com
+- name: 🎮 Steam 登录社区
+  target: 🧭 节点选择
+  rule-sets: []
+  conditions:
+  - DOMAIN-SUFFIX,steamcommunity.com
+  - DOMAIN-SUFFIX,steamcommunity-a.akamaihd.net
+  - DOMAIN-SUFFIX,steam-chat.com
+  - DOMAIN-SUFFIX,steam-api.com
+  - DOMAIN-SUFFIX,steamusercontent.com
+  - DOMAIN-SUFFIX,steamusercontent-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamuserimages-a.akamaihd.net
+  - DOMAIN-SUFFIX,steamvideo-a.akamaihd.net
+  - DOMAIN-SUFFIX,steambroadcast.akamaized.net
+  - DOMAIN-SUFFIX,steammobile.akamaized.net
+  - DOMAIN-SUFFIX,steam.tv
+  - DOMAIN-SUFFIX,s.team
+  - DOMAIN-SUFFIX,steamconnecttest.com
+  - DOMAIN-SUFFIX,valve.net
+  - DOMAIN-SUFFIX,valvesoftware.com
+  - DOMAIN-SUFFIX,steamgames.com
+  - DOMAIN-SUFFIX,steamdeck.com
+  - DOMAIN-SUFFIX,steamchina.com
+  - DOMAIN-SUFFIX,wmsjsteam.com
+  - DOMAIN-SUFFIX,csgo.com.cn
+  - DOMAIN-SUFFIX,csgo.wmsj.cn
+  - DOMAIN-SUFFIX,dota2.com.cn
+  - DOMAIN-SUFFIX,dota2.wmsj.cn
+- name: 🎮 Games
+  target: 🧭 节点选择
+  rule-sets:
+  - games_domain
+  conditions:
+  - DOMAIN-SUFFIX,epicgames.com
+  - DOMAIN-SUFFIX,unrealengine.com
+  - DOMAIN-SUFFIX,battle.net
+  - DOMAIN-SUFFIX,blizzard.com
+  - DOMAIN-SUFFIX,ea.com
+  - DOMAIN-SUFFIX,ubisoft.com
+- name: 🇨🇳 直连
+  target: DIRECT
+  rule-sets:
+  - cn_domain
+  - cn_ip
+  options: no-resolve
+- name: 🌍 Global
+  target: 🧭 节点选择
+  rule-sets:
+  - geolocation_not_cn
+fallback: 🧭 节点选择
