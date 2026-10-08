@@ -126,26 +126,45 @@ def verify_business(path: Path, business: str | None, kernel: str | None, downlo
     config["profiles"].append(profile)
     config["activeProfile"] = profile["id"]
     groups = {group["name"]: group for group in config["groups"]}
-    for name, expected in {"♾️ 中转": {"jp", "hk", "sg"}, "🇯🇵 日本自动": {"jp"}, "🤖 AI": {"land"}}.items():
+    if "🤖 AI" in groups:
+        raise ValueError("AI must be a policy targeting the landing node, not a node group")
+    if "♾️ 中转" in groups:
+        raise ValueError("Latch must reuse an existing node group for the relay")
+    ai_policy = next(rule for rule in profile["rules"] if rule["name"] == "🤖 AI")
+    if ai_policy["target"] != "land":
+        raise ValueError("AI policy did not resolve directly to the landing node")
+    for name, expected in {"🧭 节点选择": {"jp", "hk", "sg"}, "🇯🇵 日本自动": {"jp"}}.items():
         members = call("group.members", {"group": groups[name], "nodes": nodes})
         if set(members) != expected:
             raise ValueError(f"Real Latch group matcher differs: {name}")
-    if profile["chains"] != {"land": groups["♾️ 中转"]["id"]}:
+    relay_id = groups["🇯🇵 日本自动"]["id"]
+    if profile["chains"] != {"land": relay_id}:
         raise ValueError("Landing/relay chain was not preserved")
-    if call("chain.path", {"config": config, "exit": "land"}) != [groups["♾️ 中转"]["id"], "land"]:
+    if call("chain.path", {"config": config, "exit": "land"}) != [relay_id, "land"]:
         raise ValueError("Wrong chain direction")
     compiled = call("config.compile", {"config": config, "controllerPort": 19090, "secret": "fixture-secret"})
     landing = next(proxy for proxy in compiled["proxies"] if proxy["name"] == "land")
-    if landing.get("dialer-proxy") != groups["♾️ 中转"]["id"]:
+    if landing.get("dialer-proxy") != relay_id:
         raise ValueError("Compiled chain was not preserved")
 
-    # An absent landing node must leave an empty AI group and REJECT routing.
+    ai_source = next(policy for policy in source["policy-groups"] if policy["name"] == "🤖 AI")
+    ai_matches = [("RULE-SET", ref) for ref in ai_source["rule-sets"]]
+    ai_matches.extend(tuple(condition.split(",")[:2]) for condition in ai_source.get("conditions", []))
+
+    def verify_ai_exit(document, expected):
+        for match in ai_matches:
+            targets = [rule.split(",")[2] for rule in document["rules"]
+                       if tuple(rule.split(",")[:2]) == match]
+            if targets != [expected]:
+                raise ValueError(f"Unexpected compiled AI exit for {match}: {targets}")
+
+    verify_ai_exit(compiled, "land")
+
+    # An absent landing node must still REJECT all AI routing.
     absent = json.loads(json.dumps(config))
     absent["nodes"] = [node for node in absent["nodes"] if node["id"] != "land"]
     blocked = call("config.compile", {"config": absent, "controllerPort": 19090, "secret": "fixture-secret"})
-    ai = next(group for group in blocked["proxy-groups"] if group["name"] == groups["🤖 AI"]["id"])
-    if ai["proxies"] != ["REJECT"]:
-        raise ValueError("Missing landing node did not fail closed")
+    verify_ai_exit(blocked, "REJECT")
 
     if kernel:
         if not downloaded:

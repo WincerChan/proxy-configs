@@ -141,18 +141,23 @@ def latch_document(root: Path = ROOT) -> dict:
     if len(groups) != len(source["proxy-groups"]):
         raise ValueError("Duplicate source group name")
     fixed = settings.get("nodeGroups", {})
+    excluded = set(settings.get("excludeNodeGroups", []))
     policies = settings.get("policyTargets", {})
     overrides = settings.get("providerOverrides", {})
     chains = settings.get("chains", {})
-    for name in set(fixed) | set(policies):
+    for name in set(fixed) | set(policies) | excluded:
         if name not in groups:
             raise ValueError(f"Unknown source group: {name}")
+    if excluded & set(fixed):
+        raise ValueError("Excluded node groups cannot have overrides")
     for name, target in policies.items():
         if name in fixed or target not in groups[name].get("proxies", []):
             raise ValueError(f"Invalid policy choice for {name}: {target}")
 
     native = {}
     for name, group in groups.items():
+        if name in excluded:
+            continue
         if name in fixed:
             native[name] = {"name": name, **fixed[name]}
         elif group.get("include-all-proxies"):

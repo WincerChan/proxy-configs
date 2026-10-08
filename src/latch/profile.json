@@ -1,13 +1,9 @@
 {
   "policyTargets": {},
-  "nodeGroups": {
-    "🤖 AI": {
-      "type": "select",
-      "filter": "^land-jp$"
-    }
-  },
+  "nodeGroups": {},
+  "excludeNodeGroups": ["♾️ 中转"],
   "chains": {
-    "land-jp": "♾️ 中转"
+    "land-jp": "🇯🇵 日本自动"
   },
   "providerOverrides": {
     "apple": {

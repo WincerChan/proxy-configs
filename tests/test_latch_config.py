@@ -29,7 +29,7 @@ class LatchConfigTests(unittest.TestCase):
         self.fail(f'Missing rule: {rule_prefix}')
 
     def test_daily_default_routes_and_chain(self):
-        self.assertEqual("🤖 AI", self.target("DOMAIN-SUFFIX,chatgpt.com"))
+        self.assertEqual("land-jp", self.target("DOMAIN-SUFFIX,chatgpt.com"))
         self.assertEqual("🧭 节点选择", self.target("DOMAIN-SUFFIX,binance.com"))
         self.assertEqual("🇸🇬 新加坡自动", self.target("RULE-SET,telegram_domain"))
         self.assertEqual("🇯🇵 日本自动", self.target("DOMAIN,hound-jp.itswincer.net"))
@@ -38,11 +38,11 @@ class LatchConfigTests(unittest.TestCase):
         self.assertEqual("DIRECT", self.target("DOMAIN-SUFFIX,steamcontent.com"))
         self.assertEqual("DIRECT", self.target("DOMAIN-SUFFIX,store.steampowered.com"))
         self.assertEqual("🧭 节点选择", self.target("DOMAIN-SUFFIX,steamcommunity.com"))
-        self.assertEqual([{"name": "land-jp", "dialer-proxy": "♾️ 中转"}], self.document["proxies"])
+        self.assertEqual([{"name": "land-jp", "dialer-proxy": "🇯🇵 日本自动"}], self.document["proxies"])
 
     def test_matching_excludes_landing_premium_and_information(self):
         groups = {group["name"]: group for group in self.document["proxy-groups"]}
-        relay = re.compile(groups["♾️ 中转"]["filter"], re.IGNORECASE)
+        relay = re.compile(groups["🧭 节点选择"]["filter"], re.IGNORECASE)
         japan = re.compile(groups["🇯🇵 日本自动"]["filter"], re.IGNORECASE)
         for name in ["JP 01", "Tokyo 02", "日本 03"]:
             self.assertTrue(relay.search(name), name)
@@ -51,9 +51,42 @@ class LatchConfigTests(unittest.TestCase):
             self.assertFalse(relay.search(name), name)
             self.assertFalse(japan.search(name), name)
         self.assertFalse(japan.search("HK 01"))
-        ai = re.compile(groups["🤖 AI"]["filter"], re.IGNORECASE)
-        self.assertTrue(ai.search("land-jp"))
-        self.assertFalse(ai.search("JP 01"))
+
+    def test_ai_policy_targets_landing_node_without_duplicate_group(self):
+        documents = [self.document, yaml.safe_load(
+            (ROOT / "dist/latch/latch-naixi-stable.yaml").read_text()
+        )]
+        for document in documents:
+            self.assertNotIn("🤖 AI", [group["name"] for group in document["proxy-groups"]])
+            self.assertNotIn("♾️ 中转", [group["name"] for group in document["proxy-groups"]])
+            policies = [policy for policy in document["policy-groups"] if policy["name"] == "🤖 AI"]
+            self.assertEqual(1, len(policies))
+            self.assertEqual("land-jp", policies[0]["target"])
+            self.assertEqual(["ai_domain"], policies[0]["rule-sets"])
+            source_rules = yaml.safe_load((ROOT / "src/clash/40-rules.yaml").read_text())["rules"]
+            expected_conditions = [','.join(rule.split(',')[:2]) for rule in source_rules
+                                   if rule.split(',')[0] != "RULE-SET" and rule.split(',')[-1] == "🤖 AI"]
+            self.assertEqual(expected_conditions, policies[0]["conditions"])
+            self.assertEqual([{"name": "land-jp", "dialer-proxy": "🇯🇵 日本自动"}], document["proxies"])
+
+    def test_excluded_node_groups_reject_invalid_overrides_and_references(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(ROOT / "src", root / "src")
+            profile = root / "src/latch/profile.json"
+            original = json.loads(profile.read_text())
+            cases = [
+                ({"excludeNodeGroups": ["unknown-group"]}, "Unknown source group"),
+                ({"nodeGroups": {"♾️ 中转": {"type": "select", "filter": ".*"}}},
+                 "Excluded node groups cannot have overrides"),
+                ({"chains": {"land-jp": "♾️ 中转"}}, "Invalid chain reference"),
+            ]
+            for changes, error in cases:
+                with self.subTest(changes=changes):
+                    settings = {**original, **changes}
+                    profile.write_text(json.dumps(settings))
+                    with self.assertRaisesRegex(ValueError, error):
+                        self.build.latch_document(root)
 
     def test_providers_and_rule_options_preserve_source(self):
         source = yaml.safe_load((ROOT / "src/clash/30-rule-providers.yaml").read_text())["rule-providers"]

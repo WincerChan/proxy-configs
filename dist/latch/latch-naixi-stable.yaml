@@ -3,12 +3,8 @@
 # Requires policy-groups and conditions import support; see docs/latch.md.
 proxies:
 - name: land-jp
-  dialer-proxy: ♾️ 中转
+  dialer-proxy: 🇯🇵 日本自动
 proxy-groups:
-- name: ♾️ 中转
-  type: select
-  filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
-    left|expire date|^[0-9.]+[ ]*[KMGT]?B?[ ]*\|[ ]*[0-9.]+[ ]*[KMGT]?B?$)))(?=.*(?:.*)).*$
 - name: 🧭 节点选择
   type: select
   filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
@@ -27,9 +23,6 @@ proxy-groups:
     ]*kong|香港|港|HK|taiwan|台湾|台北|taipei|TW|japan|日本|东京|大阪|tokyo|osaka|JP|singapore|新加坡|狮城|SG|usa|united[
     ]*states|seattle|san[ ]*jose|los[ ]*angeles|new[ ]*york|dallas|ashburn|chicago|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|korea|韩国|首尔|seoul|KR|united[
     ]*kingdom|britain|london|UK|netherlands|germany|switzerland|france|sweden|bulgaria|austria|ireland|turkey|hungary|russia|canada|australia|sydney))).*$
-- name: 🤖 AI
-  type: select
-  filter: ^land-jp$
 - name: 🇭🇰 香港自动
   type: url-test
   filter: ^(?!.*(?:(^land-|premium|\[premium\]|剩余|流量|套餐|官网|到期|expire|traffic|reset|days
@@ -283,7 +276,7 @@ policy-groups:
   - DOMAIN,hound-robin-jp.itswincer.net
   - DOMAIN,arc-jp.hound.itswincer.net
 - name: 🤖 AI
-  target: 🤖 AI
+  target: land-jp
   rule-sets:
   - ai_domain
   conditions:
